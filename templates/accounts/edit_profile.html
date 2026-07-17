@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Profile | BudgetBuddy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="card auth-card shadow">
+
+    <div class="card-body">
+
+        <h2 class="auth-title">
+            Edit Profile
+        </h2>
+
+        <form>
+
+            <div class="mb-3">
+
+                <label>First Name</label>
+
+                <input type="text"
+                       class="form-control"
+                       value="John">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Last Name</label>
+
+                <input type="text"
+                       class="form-control"
+                       value="Doe">
+
+            </div>
+
+            <div class="mb-3">
+
+                <label>Email</label>
+
+                <input type="email"
+                       class="form-control"
+                       value="johndoe@gmail.com">
+
+            </div>
+
+            <button class="btn btn-success w-100">
+
+                Save Changes
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile | BudgetBuddy{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="card shadow mx-auto" style="max-width:600px;">
+
+        <div class="card-body text-center">
+
+            <img src="{% static 'images/user.png' %}"
+                 class="rounded-circle mb-3"
+                 width="120"
+                 alt="Profile">
+
+            <h3>John Doe</h3>
+
+            <p class="text-muted">@johndoe</p>
+
+            <hr>
+
+            <div class="text-start">
+
+                <p><strong>Email :</strong> johndoe@gmail.com</p>
+
+                <p><strong>Date Joined :</strong> 20 July 2026</p>
+
+            </div>
+
+            <div class="mt-4">
+
+                <a href="#" class="btn btn-primary">
+                    Edit Profile
+                </a>
+
+                <a href="#" class="btn btn-warning">
+                    Change Password
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

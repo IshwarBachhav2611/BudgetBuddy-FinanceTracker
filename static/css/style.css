@@ -1,0 +1,38 @@
+body{
+    background:#f8f9fa;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.navbar-brand{
+    font-size:1.4rem;
+}
+
+.card{
+    border:none;
+    border-radius:12px;
+}
+
+footer{
+    margin-top:60px;
+}
+
+.btn{
+    border-radius:8px;
+}
+
+.form-control{
+    border-radius:8px;
+}
+
+.hero{
+    padding:80px 0;
+    text-align:center;
+}
+
+.feature-card{
+    transition:0.3s;
+}
+
+.feature-card:hover{
+    transform:translateY(-5px);
+}
