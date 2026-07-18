@@ -1,64 +1,44 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Edit Profile | BudgetBuddy{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
-{% endblock %}
-
-{% block content %}
+{% extends 'base.html' %} {% load static %} {% block title %} Edit Profile |
+BudgetBuddy {% endblock %} {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}" />
+{% endblock %} {% block content %}
 
 <div class="card auth-card shadow">
+  <div class="card-body">
+    <h2 class="auth-title">Edit Profile</h2>
 
-    <div class="card-body">
+    <form method="POST">
+      {% csrf_token %}
 
-        <h2 class="auth-title">
-            Edit Profile
-        </h2>
+      <div class="mb-3">
+        <label class="form-label"> First Name </label>
 
-        <form>
+        {{ form.first_name }}
+      </div>
 
-            <div class="mb-3">
+      <div class="mb-3">
+        <label class="form-label"> Last Name </label>
 
-                <label>First Name</label>
+        {{ form.last_name }}
+      </div>
 
-                <input type="text"
-                       class="form-control"
-                       value="John">
+      <div class="mb-3">
+        <label class="form-label"> Username </label>
 
-            </div>
+        {{ form.username }} {% if form.username.errors %}
+        <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+        {% endif %}
+      </div>
 
-            <div class="mb-3">
+      <div class="mb-3">
+        <label class="form-label"> Email </label>
 
-                <label>Last Name</label>
+        {{ form.email }}
+      </div>
 
-                <input type="text"
-                       class="form-control"
-                       value="Doe">
-
-            </div>
-
-            <div class="mb-3">
-
-                <label>Email</label>
-
-                <input type="email"
-                       class="form-control"
-                       value="johndoe@gmail.com">
-
-            </div>
-
-            <button class="btn btn-success w-100">
-
-                Save Changes
-
-            </button>
-
-        </form>
-
-    </div>
-
+      <button type="submit" class="btn btn-success w-100">Save Changes</button>
+    </form>
+  </div>
 </div>
 
 {% endblock %}

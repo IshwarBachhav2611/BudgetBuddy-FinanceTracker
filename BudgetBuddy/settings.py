@@ -46,6 +46,8 @@ MY_APPS = [
     'apps.budgets',
     'apps.reports',
     'apps.common',
+    "apps.income",
+
 ]
 
 INSTALLED_APPS += MY_APPS;

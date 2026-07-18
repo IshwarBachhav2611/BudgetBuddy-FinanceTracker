@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard | BudgetBuddy
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- Welcome Section -->
+    <div class="mb-4">
+
+        <h2>
+            Welcome,
+            <span class="text-primary">
+                {{ request.user.first_name|default:request.user.username }}
+            </span>
+            👋
+        </h2>
+
+        <p class="text-muted">
+            Manage your personal finances efficiently.
+        </p>
+
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="row">
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Income
+                    </h6>
+
+                    <h3 class="text-success">
+                        ₹0
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Total Expense
+                    </h6>
+
+                    <h3 class="text-danger">
+                        ₹0
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Balance
+                    </h6>
+
+                    <h3 class="text-primary">
+                        ₹0
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card shadow-sm">
+
+                <div class="card-body text-center">
+
+                    <h6 class="text-muted">
+                        Monthly Budget
+                    </h6>
+
+                    <h3 class="text-warning">
+                        ₹0
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+                Quick Actions
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-md-3 mb-3">
+
+                    <button class="btn btn-success w-100">
+
+                        Add Income
+
+                    </button>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <button class="btn btn-danger w-100">
+
+                        Add Expense
+
+                    </button>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <button class="btn btn-warning w-100">
+
+                        Create Budget
+
+                    </button>
+
+                </div>
+
+                <div class="col-md-3 mb-3">
+
+                    <button class="btn btn-primary w-100">
+
+                        Reports
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Transactions -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+
+            <h5 class="mb-0">
+
+                Recent Transactions
+
+            </h5>
+
+        </div>
+
+        <div class="card-body text-center">
+
+            <p class="text-muted">
+
+                No Transactions Found.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
