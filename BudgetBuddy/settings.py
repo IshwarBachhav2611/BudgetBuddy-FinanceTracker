@@ -47,7 +47,7 @@ MY_APPS = [
     'apps.reports',
     'apps.common',
     "apps.income",
-
+    'apps.expense',
 ]
 
 INSTALLED_APPS += MY_APPS;

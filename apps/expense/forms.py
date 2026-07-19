@@ -1,11 +1,12 @@
 from django import forms
-from .models import Income
+from .models import Expense
 
 
-class IncomeForm(forms.ModelForm):
+class ExpenseForm(forms.ModelForm):
 
     class Meta:
-        model = Income
+
+        model = Expense
 
         fields = [
             "title",
@@ -21,14 +22,14 @@ class IncomeForm(forms.ModelForm):
             "title": forms.TextInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "e.g. Salary, Bonus, Freelancing"
+                    "placeholder": "Enter expense title"
                 }
             ),
 
             "amount": forms.NumberInput(
                 attrs={
                     "class": "form-control",
-                    "placeholder": "e.g. 50000"
+                    "placeholder": "Enter amount"
                 }
             ),
 
@@ -48,16 +49,14 @@ class IncomeForm(forms.ModelForm):
                 attrs={
                     "class": "form-control",
                     "type": "date"
-                },
-                format="%Y-%m-%d"
+                }
             ),
 
             "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
                     "rows": 4,
-                    "placeholder": "Write a short description (optional)"
+                    "placeholder": "Enter description (optional)"
                 }
             ),
-
         }

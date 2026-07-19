@@ -1,17 +1,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm
 from django.contrib.auth import login, logout
-from .forms import RegisterForm, LoginForm
-from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, LoginForm, EditProfileForm
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import render, redirect
 from django.contrib.auth import update_session_auth_hash
 from .forms import (RegisterForm, LoginForm, EditProfileForm, CustomPasswordChangeForm)
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from apps.income.models import Income
+from apps.expense.models import Expense
+
+
 
 def landing_view(request):
     return render(request, "accounts/landing.html")
@@ -183,3 +181,47 @@ def change_password_view(request):
     )
 
 
+@login_required
+def dashboard_view(request):
+
+    incomes = Income.objects.filter(
+        user=request.user
+    ).order_by("-date")
+
+    expenses = Expense.objects.filter(
+        user=request.user
+    ).order_by("-date")
+
+    total_income = incomes.aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    total_expense = expenses.aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    balance = total_income - total_expense
+
+    context = {
+
+        "total_income": total_income,
+
+        "total_expense": total_expense,
+
+        "balance": balance,
+
+        "income_count": incomes.count(),
+
+        "expense_count": expenses.count(),
+
+        "recent_incomes": incomes[:5],
+
+        "recent_expenses": expenses[:5],
+
+    }
+
+    return render(
+        request,
+        "dashboard/dashboard.html",
+        context,
+    )

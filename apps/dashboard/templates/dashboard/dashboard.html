@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Dashboard | BudgetBuddy
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- Welcome Section -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body d-flex justify-content-between align-items-center">
+
+            <div>
+
+                <h2 class="fw-bold mb-1">
+
+                    Welcome,
+                    <span class="text-primary">
+                        {{ request.user.first_name|default:request.user.username }}
+                    </span>
+                    👋
+
+                </h2>
+
+                <p class="text-muted mb-0">
+
+                    Here's your financial overview.
+
+                </p>
+
+            </div>
+
+            <i class="bi bi-person-circle display-4 text-primary"></i>
+
+        </div>
+
+    </div>
+
+    <!-- Summary Cards -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-cash-stack text-success display-5"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        Total Income
+
+                    </h6>
+
+                    <h3 class="fw-bold text-success">
+
+                        ₹ {{ total_income }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-wallet2 text-danger display-5"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        Total Expense
+
+                    </h6>
+
+                    <h3 class="fw-bold text-danger">
+
+                        ₹ {{ total_expense }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-piggy-bank text-primary display-5"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        Current Balance
+
+                    </h6>
+
+                    {% if balance >= 0 %}
+
+                        <h3 class="fw-bold text-primary">
+
+                            ₹ {{ balance }}
+
+                        </h3>
+
+                        <small class="text-success">
+
+                            Savings Available
+
+                        </small>
+
+                    {% else %}
+
+                        <h3 class="fw-bold text-danger">
+
+                            ₹ {{ balance }}
+
+                        </h3>
+
+                        <small class="text-danger">
+
+                            Overspent
+
+                        </small>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-receipt text-warning display-5"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        Transactions
+
+                    </h6>
+
+                    <h3 class="fw-bold text-warning">
+
+                        {{ income_count|add:expense_count }}
+
+                    </h3>
+
+                    <small class="text-muted">
+
+                        Income: {{ income_count }}
+
+                        |
+
+                        Expense: {{ expense_count }}
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Quick Actions -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-header bg-white">
+
+            <h5 class="mb-0">
+
+                Quick Actions
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+
+                    <a href="{% url 'add_income' %}" class="btn btn-success w-100 py-3">
+
+                        <i class="bi bi-plus-circle-fill"></i>
+
+                        Add Income
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <a href="{% url 'add_expense' %}" class="btn btn-danger w-100 py-3">
+
+                        <i class="bi bi-dash-circle-fill"></i>
+
+                        Add Expense
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button class="btn btn-warning w-100 py-3" disabled>
+
+                        <i class="bi bi-wallet-fill"></i>
+
+                        Budget
+
+                    </button>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button class="btn btn-primary w-100 py-3" disabled>
+
+                        <i class="bi bi-bar-chart-fill"></i>
+
+                        Reports
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Recent Records -->
+
+    <div class="row">
+
+        <!-- Recent Income -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-success text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-cash-stack"></i>
+
+                        Recent Income
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if recent_incomes %}
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Title</th>
+
+                                    <th>Date</th>
+
+                                    <th class="text-end">Amount</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for income in recent_incomes %}
+
+                                <tr>
+
+                                    <td>{{ income.title }}</td>
+
+                                    <td>{{ income.date|date:"d M Y" }}</td>
+
+                                    <td class="text-end text-success fw-bold">
+
+                                        ₹ {{ income.amount }}
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    {% else %}
+
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-cash-stack display-3 text-success"></i>
+
+                            <p class="mt-3 text-muted">
+
+                                No income records found.
+
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Recent Expense -->
+
+        <div class="col-lg-6 mb-4">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-header bg-danger text-white">
+
+                    <h5 class="mb-0">
+
+                        <i class="bi bi-wallet2"></i>
+
+                        Recent Expenses
+
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% if recent_expenses %}
+
+                        <table class="table table-hover align-middle">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Title</th>
+
+                                    <th>Date</th>
+
+                                    <th class="text-end">Amount</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for expense in recent_expenses %}
+
+                                <tr>
+
+                                    <td>{{ expense.title }}</td>
+
+                                    <td>{{ expense.date|date:"d M Y" }}</td>
+
+                                    <td class="text-end text-danger fw-bold">
+
+                                        ₹ {{ expense.amount }}
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    {% else %}
+
+                        <div class="text-center py-5">
+
+                            <i class="bi bi-wallet2 display-3 text-danger"></i>
+
+                            <p class="mt-3 text-muted">
+
+                                No expense records found.
+
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

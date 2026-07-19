@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Register | BudgetBuddy
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="card auth-card shadow">
+
+    <div class="card-body">
+
+        <h2 class="auth-title">Create Account</h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <!-- Non Field Errors -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">First Name</label>
+                    {{ form.first_name }}
+
+                    {% if form.first_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.first_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Last Name</label>
+                    {{ form.last_name }}
+
+                    {% if form.last_name.errors %}
+                        <div class="text-danger small mt-1">
+                            {{ form.last_name.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                {{ form.username }}
+
+                {% if form.username.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.username.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+
+                {% if form.email.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.email.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                {{ form.password }}
+
+                {% if form.password.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Confirm Password</label>
+                {{ form.confirm_password }}
+
+                {% if form.confirm_password.errors %}
+                    <div class="text-danger small mt-1">
+                        {{ form.confirm_password.errors }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Register
+            </button>
+
+        </form>
+        
+
+        <div class="text-center mt-3">
+            Already have an account?
+            <a href="{% url 'login' %}">Login</a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

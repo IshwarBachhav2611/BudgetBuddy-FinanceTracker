@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Add Income{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="card-header bg-white p-4">
+
+            <h2 class="mb-1">
+                💰 Add Income
+            </h2>
+
+            <p class="text-muted mb-0">
+                Record a new income transaction.
+            </p>
+
+        </div>
+
+        <div class="card-body p-4">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Income Title
+
+                    </label>
+
+                    {{ form.title }}
+
+                    <div class="text-danger small">
+
+                        {{ form.title.errors }}
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Amount (₹)
+
+                    </label>
+
+                    {{ form.amount }}
+
+                    <div class="text-danger small">
+
+                        {{ form.amount.errors }}
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Category
+
+                        </label>
+
+                        {{ form.category }}
+
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+
+                        <label class="form-label fw-semibold">
+
+                            Payment Method
+
+                        </label>
+
+                        {{ form.payment_method }}
+
+                    </div>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Date
+
+                    </label>
+
+                    {{ form.date }}
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label fw-semibold">
+
+                        Description
+
+                    </label>
+
+                    {{ form.description }}
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit" class="btn btn-success px-4">
+
+                        Save Income
+
+                    </button>
+
+                    <a href="{% url 'income_list' %}" class="btn btn-secondary px-4">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

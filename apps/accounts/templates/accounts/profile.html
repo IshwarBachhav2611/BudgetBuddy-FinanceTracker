@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+My Profile | BudgetBuddy
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h3 class="mb-0">
+                        My Profile
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+
+                        <img src="{% static 'images/user.png' %}"
+                             width="120"
+                             class="rounded-circle border">
+
+                    </div>
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th width="35%">First Name</th>
+                            <td>{{ user_data.first_name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Last Name</th>
+                            <td>{{ user_data.last_name }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Username</th>
+                            <td>{{ user_data.username }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ user_data.email }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Date Joined</th>
+                            <td>{{ user_data.date_joined }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Last Login</th>
+                            <td>{{ user_data.last_login }}</td>
+                        </tr>
+
+                    </table>
+
+                    <div class="text-center mt-4">
+
+                        <a href="{% url 'edit_profile' %}"
+                           class="btn btn-warning">
+
+                            Edit Profile
+
+                        </a>
+
+                        <a href="{% url 'change_password' %}"
+                           class="btn btn-primary">
+
+                            Change Password
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
