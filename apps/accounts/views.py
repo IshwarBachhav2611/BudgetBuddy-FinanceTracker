@@ -1,14 +1,22 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from django.contrib.auth import login, logout
-from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from .forms import (RegisterForm, LoginForm, EditProfileForm, CustomPasswordChangeForm)
-from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
-from apps.income.models import Income
-from apps.expense.models import Expense
+from datetime import date
 
+from django.contrib import messages
+from django.contrib.auth import login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.db.models import Sum
+from django.shortcuts import redirect, render
+
+from apps.budgets.models import Budget
+from apps.expense.models import Expense
+from apps.income.models import Income
+
+from .forms import (
+    RegisterForm,
+    LoginForm,
+    EditProfileForm,
+    CustomPasswordChangeForm,
+)
 
 
 def landing_view(request):
@@ -28,7 +36,7 @@ def register_view(request):
                 last_name=form.cleaned_data["last_name"],
                 username=form.cleaned_data["username"],
                 email=form.cleaned_data["email"],
-                password=form.cleaned_data["password"]
+                password=form.cleaned_data["password"],
             )
 
             messages.success(request, "Registration Successful!")
@@ -39,9 +47,13 @@ def register_view(request):
 
         form = RegisterForm()
 
-    return render(request, "accounts/register.html", {
-        "form": form
-    })
+    return render(
+        request,
+        "accounts/register.html",
+        {
+            "form": form
+        }
+    )
 
 
 def login_view(request):
@@ -59,7 +71,10 @@ def login_view(request):
 
             login(request, user)
 
-            messages.success(request, "Login Successful.")
+            messages.success(
+                request,
+                "Login Successful."
+            )
 
             return redirect("dashboard")
 
@@ -75,34 +90,100 @@ def login_view(request):
         }
     )
 
+
 def logout_view(request):
 
     logout(request)
 
-    messages.success(request, "Logged Out Successfully.")
+    messages.success(
+        request,
+        "Logged Out Successfully."
+    )
 
     return redirect("landing")
+
+
+# ==========================
+# Dashboard
+# ==========================
 
 @login_required(login_url="login")
 def dashboard_view(request):
 
+    incomes = Income.objects.filter(
+        user=request.user
+    ).order_by("-date")
+
+    expenses = Expense.objects.filter(
+        user=request.user
+    ).order_by("-date")
+
+    total_income = incomes.aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    total_expense = expenses.aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    balance = total_income - total_expense
+
+    today = date.today()
+
+    current_budget = Budget.objects.filter(
+        user=request.user,
+        month=today.month,
+        year=today.year,
+    ).first()
+
+    context = {
+
+        "total_income": total_income,
+
+        "total_expense": total_expense,
+
+        "balance": balance,
+
+        "current_budget": (
+            current_budget.amount
+            if current_budget
+            else 0
+        ),
+
+        "income_count": incomes.count(),
+
+        "expense_count": expenses.count(),
+
+        "recent_incomes": incomes[:5],
+
+        "recent_expenses": expenses[:5],
+
+    }
+
     return render(
         request,
-        "dashboard/dashboard.html"
+        "dashboard/dashboard.html",
+        context,
     )
 
+
+# ==========================
+# Profile
+# ==========================
 
 @login_required(login_url="login")
 def profile_view(request):
 
     context = {
+
         "user_data": request.user
+
     }
 
     return render(
         request,
         "accounts/profile.html",
-        context
+        context,
     )
 
 
@@ -113,7 +194,7 @@ def edit_profile_view(request):
 
         form = EditProfileForm(
             request.POST,
-            instance=request.user
+            instance=request.user,
         )
 
         if form.is_valid():
@@ -149,7 +230,7 @@ def change_password_view(request):
 
         form = CustomPasswordChangeForm(
             request.user,
-            request.POST
+            request.POST,
         )
 
         if form.is_valid():
@@ -158,7 +239,7 @@ def change_password_view(request):
 
             update_session_auth_hash(
                 request,
-                user
+                user,
             )
 
             messages.success(
@@ -170,7 +251,9 @@ def change_password_view(request):
 
     else:
 
-        form = CustomPasswordChangeForm(request.user)
+        form = CustomPasswordChangeForm(
+            request.user
+        )
 
     return render(
         request,
@@ -178,50 +261,4 @@ def change_password_view(request):
         {
             "form": form
         }
-    )
-
-
-@login_required
-def dashboard_view(request):
-
-    incomes = Income.objects.filter(
-        user=request.user
-    ).order_by("-date")
-
-    expenses = Expense.objects.filter(
-        user=request.user
-    ).order_by("-date")
-
-    total_income = incomes.aggregate(
-        total=Sum("amount")
-    )["total"] or 0
-
-    total_expense = expenses.aggregate(
-        total=Sum("amount")
-    )["total"] or 0
-
-    balance = total_income - total_expense
-
-    context = {
-
-        "total_income": total_income,
-
-        "total_expense": total_expense,
-
-        "balance": balance,
-
-        "income_count": incomes.count(),
-
-        "expense_count": expenses.count(),
-
-        "recent_incomes": incomes[:5],
-
-        "recent_expenses": expenses[:5],
-
-    }
-
-    return render(
-        request,
-        "dashboard/dashboard.html",
-        context,
     )

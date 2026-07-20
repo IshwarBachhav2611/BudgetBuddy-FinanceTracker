@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Budget | BudgetBuddy{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+<div class="mb-4">
+
+<h2 class="fw-bold text-warning">
+
+<i class="bi bi-wallet-fill"></i>
+
+Edit Monthly Budget
+
+</h2>
+
+<p class="text-muted">
+
+Set a spending limit for the selected month.
+
+</p>
+
+</div>
+
+<div class="card border-0 shadow rounded-4">
+
+<div class="card-body p-4">
+
+<form method="POST">
+
+{% csrf_token %}
+
+<div class="row">
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Budget Amount
+
+</label>
+
+{{ form.amount }}
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Month
+
+</label>
+
+{{ form.month }}
+
+</div>
+
+<div class="col-md-4 mb-3">
+
+<label class="form-label">
+
+Year
+
+</label>
+
+{{ form.year }}
+
+</div>
+
+</div>
+
+<div class="d-flex justify-content-end">
+
+<a href="{% url 'budget_list' %}" class="btn btn-secondary me-2">
+
+Cancel
+
+</a>
+
+<button class="btn btn-warning">
+
+<i class="bi bi-check-circle"></i>
+
+Update Budget
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

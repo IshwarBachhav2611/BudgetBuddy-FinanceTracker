@@ -8,9 +8,9 @@ Dashboard | BudgetBuddy
 
 <div class="container py-4">
 
-    <!-- Welcome Section -->
+    <!-- Welcome Card -->
 
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card border-0 shadow rounded-4 mb-4">
 
         <div class="card-body d-flex justify-content-between align-items-center">
 
@@ -28,13 +28,13 @@ Dashboard | BudgetBuddy
 
                 <p class="text-muted mb-0">
 
-                    Here's your financial overview.
+                    Here's your personal finance overview.
 
                 </p>
 
             </div>
 
-            <i class="bi bi-person-circle display-4 text-primary"></i>
+            <i class="bi bi-person-circle display-3 text-primary"></i>
 
         </div>
 
@@ -46,22 +46,18 @@ Dashboard | BudgetBuddy
 
         <div class="col-lg-3 col-md-6">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="bi bi-cash-stack text-success display-5"></i>
+                    <i class="bi bi-cash-stack display-5 text-success"></i>
 
                     <h6 class="text-muted mt-3">
-
                         Total Income
-
                     </h6>
 
                     <h3 class="fw-bold text-success">
-
                         ₹ {{ total_income }}
-
                     </h3>
 
                 </div>
@@ -72,22 +68,18 @@ Dashboard | BudgetBuddy
 
         <div class="col-lg-3 col-md-6">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="bi bi-wallet2 text-danger display-5"></i>
+                    <i class="bi bi-wallet2 display-5 text-danger"></i>
 
                     <h6 class="text-muted mt-3">
-
                         Total Expense
-
                     </h6>
 
                     <h3 class="fw-bold text-danger">
-
                         ₹ {{ total_expense }}
-
                     </h3>
 
                 </div>
@@ -98,45 +90,35 @@ Dashboard | BudgetBuddy
 
         <div class="col-lg-3 col-md-6">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="bi bi-piggy-bank text-primary display-5"></i>
+                    <i class="bi bi-piggy-bank display-5 text-primary"></i>
 
                     <h6 class="text-muted mt-3">
-
                         Current Balance
-
                     </h6>
 
                     {% if balance >= 0 %}
 
-                        <h3 class="fw-bold text-primary">
+                    <h3 class="fw-bold text-primary">
+                        ₹ {{ balance }}
+                    </h3>
 
-                            ₹ {{ balance }}
-
-                        </h3>
-
-                        <small class="text-success">
-
-                            Savings Available
-
-                        </small>
+                    <small class="text-success">
+                        Savings Available
+                    </small>
 
                     {% else %}
 
-                        <h3 class="fw-bold text-danger">
+                    <h3 class="fw-bold text-danger">
+                        ₹ {{ balance }}
+                    </h3>
 
-                            ₹ {{ balance }}
-
-                        </h3>
-
-                        <small class="text-danger">
-
-                            Overspent
-
-                        </small>
+                    <small class="text-danger">
+                        Overspent
+                    </small>
 
                     {% endif %}
 
@@ -148,33 +130,19 @@ Dashboard | BudgetBuddy
 
         <div class="col-lg-3 col-md-6">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
                 <div class="card-body text-center">
 
-                    <i class="bi bi-receipt text-warning display-5"></i>
+                    <i class="bi bi-wallet-fill display-5 text-warning"></i>
 
                     <h6 class="text-muted mt-3">
-
-                        Transactions
-
+                        Monthly Budget
                     </h6>
 
                     <h3 class="fw-bold text-warning">
-
-                        {{ income_count|add:expense_count }}
-
+                        ₹ {{ current_budget }}
                     </h3>
-
-                    <small class="text-muted">
-
-                        Income: {{ income_count }}
-
-                        |
-
-                        Expense: {{ expense_count }}
-
-                    </small>
 
                 </div>
 
@@ -186,11 +154,13 @@ Dashboard | BudgetBuddy
 
     <!-- Quick Actions -->
 
-    <div class="card border-0 shadow-sm rounded-4 mb-4">
+    <div class="card border-0 shadow rounded-4 mb-4">
 
         <div class="card-header bg-white">
 
             <h5 class="mb-0">
+
+                <i class="bi bi-lightning-charge-fill"></i>
 
                 Quick Actions
 
@@ -202,11 +172,11 @@ Dashboard | BudgetBuddy
 
             <div class="row g-3">
 
-                <div class="col-md-3">
+                <div class="col-lg-3 col-md-6">
 
                     <a href="{% url 'add_income' %}" class="btn btn-success w-100 py-3">
 
-                        <i class="bi bi-plus-circle-fill"></i>
+                        <i class="bi bi-plus-circle-fill"></i><br>
 
                         Add Income
 
@@ -214,11 +184,11 @@ Dashboard | BudgetBuddy
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-lg-3 col-md-6">
 
                     <a href="{% url 'add_expense' %}" class="btn btn-danger w-100 py-3">
 
-                        <i class="bi bi-dash-circle-fill"></i>
+                        <i class="bi bi-dash-circle-fill"></i><br>
 
                         Add Expense
 
@@ -226,27 +196,27 @@ Dashboard | BudgetBuddy
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-lg-3 col-md-6">
 
-                    <button class="btn btn-warning w-100 py-3" disabled>
+                    <a href="{% url 'budget_list' %}" class="btn btn-warning w-100 py-3">
 
-                        <i class="bi bi-wallet-fill"></i>
+                        <i class="bi bi-wallet-fill"></i><br>
 
                         Budget
 
-                    </button>
+                    </a>
 
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-lg-3 col-md-6">
 
-                    <button class="btn btn-primary w-100 py-3" disabled>
+                    <a href="#" class="btn btn-primary w-100 py-3">
 
-                        <i class="bi bi-bar-chart-fill"></i>
+                        <i class="bi bi-bar-chart-fill"></i><br>
 
                         Reports
 
-                    </button>
+                    </a>
 
                 </div>
 
@@ -260,17 +230,15 @@ Dashboard | BudgetBuddy
 
     <div class="row">
 
-        <!-- Recent Income -->
+        <!-- Income -->
 
         <div class="col-lg-6 mb-4">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
                 <div class="card-header bg-success text-white">
 
                     <h5 class="mb-0">
-
-                        <i class="bi bi-cash-stack"></i>
 
                         Recent Income
 
@@ -282,59 +250,67 @@ Dashboard | BudgetBuddy
 
                     {% if recent_incomes %}
 
-                        <table class="table table-hover align-middle">
+                    <table class="table table-hover">
 
-                            <thead>
+                        <thead>
 
-                                <tr>
+                            <tr>
 
-                                    <th>Title</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th class="text-end">Amount</th>
 
-                                    <th>Date</th>
+                            </tr>
 
-                                    <th class="text-end">Amount</th>
+                        </thead>
 
-                                </tr>
+                        <tbody>
 
-                            </thead>
+                            {% for income in recent_incomes %}
 
-                            <tbody>
+                            <tr>
 
-                                {% for income in recent_incomes %}
+                                <td>{{ income.title }}</td>
 
-                                <tr>
+                                <td>{{ income.date|date:"d M Y" }}</td>
 
-                                    <td>{{ income.title }}</td>
+                                <td class="text-end text-success fw-bold">
 
-                                    <td>{{ income.date|date:"d M Y" }}</td>
+                                    ₹ {{ income.amount }}
 
-                                    <td class="text-end text-success fw-bold">
+                                </td>
 
-                                        ₹ {{ income.amount }}
+                            </tr>
 
-                                    </td>
+                            {% endfor %}
 
-                                </tr>
+                        </tbody>
 
-                                {% endfor %}
+                    </table>
 
-                            </tbody>
+                    <div class="text-end">
 
-                        </table>
+                        <a href="{% url 'income_list' %}" class="btn btn-outline-success btn-sm">
+
+                            View All
+
+                        </a>
+
+                    </div>
 
                     {% else %}
 
-                        <div class="text-center py-5">
+                    <div class="text-center py-5">
 
-                            <i class="bi bi-cash-stack display-3 text-success"></i>
+                        <i class="bi bi-cash-stack display-4 text-success"></i>
 
-                            <p class="mt-3 text-muted">
+                        <p class="mt-3 text-muted">
 
-                                No income records found.
+                            No income records found.
 
-                            </p>
+                        </p>
 
-                        </div>
+                    </div>
 
                     {% endif %}
 
@@ -344,17 +320,15 @@ Dashboard | BudgetBuddy
 
         </div>
 
-        <!-- Recent Expense -->
+        <!-- Expense -->
 
         <div class="col-lg-6 mb-4">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
                 <div class="card-header bg-danger text-white">
 
                     <h5 class="mb-0">
-
-                        <i class="bi bi-wallet2"></i>
 
                         Recent Expenses
 
@@ -366,59 +340,67 @@ Dashboard | BudgetBuddy
 
                     {% if recent_expenses %}
 
-                        <table class="table table-hover align-middle">
+                    <table class="table table-hover">
 
-                            <thead>
+                        <thead>
 
-                                <tr>
+                            <tr>
 
-                                    <th>Title</th>
+                                <th>Title</th>
+                                <th>Date</th>
+                                <th class="text-end">Amount</th>
 
-                                    <th>Date</th>
+                            </tr>
 
-                                    <th class="text-end">Amount</th>
+                        </thead>
 
-                                </tr>
+                        <tbody>
 
-                            </thead>
+                            {% for expense in recent_expenses %}
 
-                            <tbody>
+                            <tr>
 
-                                {% for expense in recent_expenses %}
+                                <td>{{ expense.title }}</td>
 
-                                <tr>
+                                <td>{{ expense.date|date:"d M Y" }}</td>
 
-                                    <td>{{ expense.title }}</td>
+                                <td class="text-end text-danger fw-bold">
 
-                                    <td>{{ expense.date|date:"d M Y" }}</td>
+                                    ₹ {{ expense.amount }}
 
-                                    <td class="text-end text-danger fw-bold">
+                                </td>
 
-                                        ₹ {{ expense.amount }}
+                            </tr>
 
-                                    </td>
+                            {% endfor %}
 
-                                </tr>
+                        </tbody>
 
-                                {% endfor %}
+                    </table>
 
-                            </tbody>
+                    <div class="text-end">
 
-                        </table>
+                        <a href="{% url 'expense_list' %}" class="btn btn-outline-danger btn-sm">
+
+                            View All
+
+                        </a>
+
+                    </div>
 
                     {% else %}
 
-                        <div class="text-center py-5">
+                    <div class="text-center py-5">
 
-                            <i class="bi bi-wallet2 display-3 text-danger"></i>
+                        <i class="bi bi-wallet2 display-4 text-danger"></i>
 
-                            <p class="mt-3 text-muted">
+                        <p class="mt-3 text-muted">
 
-                                No expense records found.
+                            No expense records found.
 
-                            </p>
+                        </p>
 
-                        </div>
+                    </div>
 
                     {% endif %}
 

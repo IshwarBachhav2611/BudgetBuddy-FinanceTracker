@@ -1,50 +1,88 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#">
-      <i class="bi bi-wallet2"></i> BudgetBuddy
-    </a>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container">
 
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <a class="navbar-brand fw-bold" href="{% url 'dashboard' %}">
+            <i class="bi bi-wallet2"></i>
+            BudgetBuddy
+        </a>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
-        {% if user.is_authenticated %}
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav">
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'dashboard' %}"> Dashboard </a>
-        </li>
+            <span class="navbar-toggler-icon"></span>
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'profile' %}"> Profile </a>
-        </li>
+        </button>
 
-        <li class="nav-item ms-2">
-          <a class="btn btn-danger" href="{% url 'logout' %}"> Logout </a>
-        </li>
+        <div class="collapse navbar-collapse" id="navbarNav">
 
-        {% else %}
+            <ul class="navbar-nav ms-auto align-items-lg-center">
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'login' %}"> Login </a>
-        </li>
+                {% if user.is_authenticated %}
 
-        <li class="nav-item ms-2">
-          <a class="btn btn-light" href="{% url 'register' %}"> Register </a>
-        </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">
+                        <i class="bi bi-speedometer2"></i>
+                        Dashboard
+                    </a>
+                </li>
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'income_list' %}"> Income </a>
-        </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'income_list' %}">
+                        <i class="bi bi-cash-stack"></i>
+                        Income
+                    </a>
+                </li>
 
-        {% endif %}
-      </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'expense_list' %}">
+                        <i class="bi bi-wallet2"></i>
+                        Expense
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'budget_list' %}">
+                        <i class="bi bi-piggy-bank"></i>
+                        Budget
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile' %}">
+                        <i class="bi bi-person-circle"></i>
+                        Profile
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                    <a class="btn btn-danger" href="{% url 'logout' %}">
+                        <i class="bi bi-box-arrow-right"></i>
+                        Logout
+                    </a>
+                </li>
+
+                {% else %}
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                    <a class="btn btn-light" href="{% url 'register' %}">
+                        Register
+                    </a>
+                </li>
+
+                {% endif %}
+
+            </ul>
+
+        </div>
+
     </div>
-  </div>
 </nav>
