@@ -1,15 +1,15 @@
 from datetime import date
-
 from django.contrib import messages
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import redirect, render
-
 from apps.budgets.models import Budget
 from apps.expense.models import Expense
 from apps.income.models import Income
+from apps.notifications.utils import create_notification
+
 
 from .forms import (
     RegisterForm,
@@ -37,6 +37,11 @@ def register_view(request):
                 username=form.cleaned_data["username"],
                 email=form.cleaned_data["email"],
                 password=form.cleaned_data["password"],
+            )
+            create_notification(
+                user,
+                "Welcome to BudgetBuddy 🎉",
+                "Start tracking your income and expenses today."
             )
 
             messages.success(request, "Registration Successful!")
@@ -70,6 +75,12 @@ def login_view(request):
             user = form.cleaned_data["user"]
 
             login(request, user)
+            create_notification(
+                user,
+                "Login Successful",
+                "Welcome back to BudgetBuddy.",
+                "info",
+            )
 
             messages.success(
                 request,
@@ -110,6 +121,12 @@ def logout_view(request):
 @login_required(login_url="login")
 def dashboard_view(request):
 
+    today = date.today()
+
+    # ---------------------------------
+    # All Income & Expense Records
+    # ---------------------------------
+
     incomes = Income.objects.filter(
         user=request.user
     ).order_by("-date")
@@ -118,6 +135,10 @@ def dashboard_view(request):
         user=request.user
     ).order_by("-date")
 
+    # ---------------------------------
+    # Overall Totals
+    # ---------------------------------
+
     total_income = incomes.aggregate(
         total=Sum("amount")
     )["total"] or 0
@@ -125,10 +146,37 @@ def dashboard_view(request):
     total_expense = expenses.aggregate(
         total=Sum("amount")
     )["total"] or 0
+    
 
-    balance = total_income - total_expense
+    total_savings = total_income - total_expense
 
-    today = date.today()
+    # ---------------------------------
+    # Current Month Income
+    # ---------------------------------
+
+    month_income = Income.objects.filter(
+        user=request.user,
+        date__month=today.month,
+        date__year=today.year,
+    ).aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    # ---------------------------------
+    # Current Month Expense
+    # ---------------------------------
+
+    month_expense = Expense.objects.filter(
+        user=request.user,
+        date__month=today.month,
+        date__year=today.year,
+    ).aggregate(
+        total=Sum("amount")
+    )["total"] or 0
+
+    # ---------------------------------
+    # Current Month Budget
+    # ---------------------------------
 
     current_budget = Budget.objects.filter(
         user=request.user,
@@ -136,28 +184,102 @@ def dashboard_view(request):
         year=today.year,
     ).first()
 
+    budget_amount = current_budget.amount if current_budget else 0
+
+    # ---------------------------------
+    # Current Month Balance
+    # ---------------------------------
+
+    month_balance = month_income - month_expense
+
+    # ---------------------------------
+    # Budget Alert
+    # ---------------------------------
+
+    alert_message = None
+    alert_type = None
+
+    if budget_amount > 0:
+
+        usage = (month_expense / budget_amount) * 100
+
+        if month_expense > budget_amount:
+
+            extra = month_expense - budget_amount
+
+            alert_type = "danger"
+
+            alert_message = (
+                f"You have exceeded this month's budget by ₹ {extra:.2f}."
+            )
+            create_notification(
+                request.user,
+                "Budget Exceeded",
+                alert_message,
+                "danger",
+            )
+
+        elif usage >= 85:
+
+            remaining = budget_amount - month_expense
+
+            alert_type = "warning"
+
+            alert_message = (
+                f"You have used {usage:.0f}% of your budget. "
+                f"Only ₹ {remaining:.2f} remaining."
+            )
+            create_notification(
+                request.user,
+                "Budget Warning",
+                alert_message,
+                "warning",
+            )
+
+        else:
+
+            remaining = budget_amount - month_expense
+
+            alert_type = "success"
+
+            alert_message = (
+                f"Great! You are within budget. "
+                f"₹ {remaining:.2f} remaining this month."
+            )
+
+    # ---------------------------------
+    # Context
+    # ---------------------------------
+
     context = {
 
+        # Current Month
+
+        "month_income": month_income,
+        "month_expense": month_expense,
+        "current_budget": budget_amount,
+        "month_balance": month_balance,
+
+        # Overall
+
         "total_income": total_income,
-
         "total_expense": total_expense,
+        "total_savings": total_savings,
 
-        "balance": balance,
-
-        "current_budget": (
-            current_budget.amount
-            if current_budget
-            else 0
-        ),
+        # Counts
 
         "income_count": incomes.count(),
-
         "expense_count": expenses.count(),
 
-        "recent_incomes": incomes[:5],
+        # Recent Records
 
+        "recent_incomes": incomes[:5],
         "recent_expenses": expenses[:5],
 
+        # Budget Alert
+
+        "alert_message": alert_message,
+        "alert_type": alert_type,
     }
 
     return render(
@@ -165,7 +287,6 @@ def dashboard_view(request):
         "dashboard/dashboard.html",
         context,
     )
-
 
 # ==========================
 # Profile
@@ -200,6 +321,12 @@ def edit_profile_view(request):
         if form.is_valid():
 
             form.save()
+            create_notification(
+                request.user,
+                "Profile Updated",
+                "Your profile information has been updated.",
+                "success",
+            )
 
             messages.success(
                 request,
@@ -236,6 +363,13 @@ def change_password_view(request):
         if form.is_valid():
 
             user = form.save()
+
+            create_notification(
+                request.user,
+                "Password Changed",
+                "Your account password was changed successfully.",
+                "warning",
+            )
 
             update_session_auth_hash(
                 request,

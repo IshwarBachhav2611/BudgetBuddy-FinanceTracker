@@ -40,111 +40,95 @@ Dashboard | BudgetBuddy
 
     </div>
 
-    <!-- Summary Cards -->
+        <!-- Budget Alert -->
 
-    <div class="row g-4 mb-4">
+    {% if alert_message %}
 
-        <div class="col-lg-3 col-md-6">
+    <div class="alert alert-{{ alert_type }} alert-dismissible fade show shadow rounded-4 mb-4">
 
-            <div class="card border-0 shadow rounded-4 h-100">
+        <div class="d-flex align-items-center">
 
-                <div class="card-body text-center">
+            {% if alert_type == "danger" %}
 
-                    <i class="bi bi-cash-stack display-5 text-success"></i>
+                <i class="bi bi-exclamation-triangle-fill fs-2 me-3 text-danger"></i>
 
-                    <h6 class="text-muted mt-3">
-                        Total Income
-                    </h6>
+            {% elif alert_type == "warning" %}
 
-                    <h3 class="fw-bold text-success">
-                        ₹ {{ total_income }}
-                    </h3>
+                <i class="bi bi-exclamation-circle-fill fs-2 me-3 text-warning"></i>
 
-                </div>
+            {% else %}
 
-            </div>
+                <i class="bi bi-check-circle-fill fs-2 me-3 text-success"></i>
 
-        </div>
+            {% endif %}
 
-        <div class="col-lg-3 col-md-6">
+            <div>
 
-            <div class="card border-0 shadow rounded-4 h-100">
+                {% if alert_type == "danger" %}
 
-                <div class="card-body text-center">
+                    <h5 class="fw-bold mb-1 text-danger">
+                        Budget Exceeded!
+                    </h5>
 
-                    <i class="bi bi-wallet2 display-5 text-danger"></i>
+                {% elif alert_type == "warning" %}
 
-                    <h6 class="text-muted mt-3">
-                        Total Expense
-                    </h6>
+                    <h5 class="fw-bold mb-1 text-warning">
+                        Budget Warning
+                    </h5>
 
-                    <h3 class="fw-bold text-danger">
-                        ₹ {{ total_expense }}
-                    </h3>
+                {% else %}
 
-                </div>
+                    <h5 class="fw-bold mb-1 text-success">
+                        Budget Status
+                    </h5>
 
-            </div>
+                {% endif %}
 
-        </div>
+                <p class="mb-0">
 
-        <div class="col-lg-3 col-md-6">
+                    {{ alert_message }}
 
-            <div class="card border-0 shadow rounded-4 h-100">
-
-                <div class="card-body text-center">
-
-                    <i class="bi bi-piggy-bank display-5 text-primary"></i>
-
-                    <h6 class="text-muted mt-3">
-                        Current Balance
-                    </h6>
-
-                    {% if balance >= 0 %}
-
-                    <h3 class="fw-bold text-primary">
-                        ₹ {{ balance }}
-                    </h3>
-
-                    <small class="text-success">
-                        Savings Available
-                    </small>
-
-                    {% else %}
-
-                    <h3 class="fw-bold text-danger">
-                        ₹ {{ balance }}
-                    </h3>
-
-                    <small class="text-danger">
-                        Overspent
-                    </small>
-
-                    {% endif %}
-
-                </div>
+                </p>
 
             </div>
 
         </div>
 
-        <div class="col-lg-3 col-md-6">
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert">
+        </button>
 
-            <div class="card border-0 shadow rounded-4 h-100">
+    </div>
 
-                <div class="card-body text-center">
+    {% endif %}
 
-                    <i class="bi bi-wallet-fill display-5 text-warning"></i>
+<!-- Summary Cards -->
 
-                    <h6 class="text-muted mt-3">
-                        Monthly Budget
-                    </h6>
+<div class="row g-4 mb-4">
 
-                    <h3 class="fw-bold text-warning">
-                        ₹ {{ current_budget }}
-                    </h3>
+    <!-- Current Month Income -->
 
-                </div>
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-cash-stack display-5 text-success"></i>
+
+                <h6 class="text-muted mt-3">
+
+                    This Month Income
+
+                </h6>
+
+                <h3 class="fw-bold text-success">
+
+                    ₹ {{ month_income }}
+
+                </h3>
 
             </div>
 
@@ -152,6 +136,102 @@ Dashboard | BudgetBuddy
 
     </div>
 
+    <!-- Current Month Expense -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-wallet2 display-5 text-danger"></i>
+
+                <h6 class="text-muted mt-3">
+
+                    This Month Expense
+
+                </h6>
+
+                <h3 class="fw-bold text-danger">
+
+                    ₹ {{ month_expense }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Current Budget -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-wallet-fill display-5 text-warning"></i>
+
+                <h6 class="text-muted mt-3">
+
+                    Monthly Budget
+
+                </h6>
+
+                <h3 class="fw-bold text-warning">
+
+                    ₹ {{ current_budget }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Total Savings -->
+
+    <div class="col-lg-3 col-md-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-bank display-5 text-primary"></i>
+
+                <h6 class="text-muted mt-3">
+
+                    Total Savings
+
+                </h6>
+
+                {% if total_savings >= 0 %}
+
+                <h3 class="fw-bold text-primary">
+
+                    ₹ {{ total_savings }}
+
+                </h3>
+
+                {% else %}
+
+                <h3 class="fw-bold text-danger">
+
+                    ₹ {{ total_savings }}
+
+                </h3>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+    
     <!-- Quick Actions -->
 
     <div class="card border-0 shadow rounded-4 mb-4">
@@ -210,7 +290,7 @@ Dashboard | BudgetBuddy
 
                 <div class="col-lg-3 col-md-6">
 
-                    <a href="#" class="btn btn-primary w-100 py-3">
+                    <a href="{% url 'reports' %}" class="btn btn-primary w-100 py-3">
 
                         <i class="bi bi-bar-chart-fill"></i><br>
 

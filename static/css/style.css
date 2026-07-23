@@ -3,36 +3,124 @@ body{
     font-family:Arial, Helvetica, sans-serif;
 }
 
+/* Navbar */
+
 .navbar-brand{
     font-size:1.4rem;
+    font-weight:700;
 }
+
+/* Cards */
 
 .card{
     border:none;
     border-radius:12px;
 }
 
+/* Footer */
+
 footer{
     margin-top:60px;
 }
+
+/* Buttons */
 
 .btn{
     border-radius:8px;
 }
 
-.form-control{
+/* Forms */
+
+.form-control,
+.form-select{
     border-radius:8px;
 }
+
+/* Hero */
 
 .hero{
     padding:80px 0;
     text-align:center;
 }
 
+/* Feature Cards */
+
 .feature-card{
-    transition:0.3s;
+    transition:.3s;
 }
 
 .feature-card:hover{
     transform:translateY(-5px);
+}
+
+/* ===========================
+   Notification Dropdown
+=========================== */
+
+.notification-dropdown{
+    --bs-dropdown-min-width: 380px;
+
+    width: 380px !important;
+    min-width: 380px !important;
+    max-width: 380px !important;
+
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+
+.notification-dropdown .dropdown-item{
+    white-space:normal;
+}
+
+/* Tablet */
+
+@media (max-width:992px){
+
+   @media (max-width:576px){
+
+        .notification-dropdown{
+
+            --bs-dropdown-min-width: 340px;
+
+            width: 340px !important;
+            min-width: 340px !important;
+            max-width: 340px !important;
+
+        }
+
+    }
+
+}
+
+/* Mobile */
+
+@media (max-width:576px){
+
+    .notification-dropdown{
+
+        width:320px;
+        max-width:calc(100vw - 20px);
+
+        right:0 !important;
+        left:auto !important;
+
+        transform:none !important;
+
+        margin-top:12px;
+
+    }
+
+    .notification-dropdown .display-4{
+        font-size:2.8rem;
+    }
+
+    .notification-dropdown h5{
+        font-size:1.15rem;
+    }
+
+    .notification-dropdown small{
+        font-size:.85rem;
+    }
+
 }

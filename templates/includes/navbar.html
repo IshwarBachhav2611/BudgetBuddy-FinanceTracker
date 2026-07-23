@@ -6,15 +6,110 @@
             BudgetBuddy
         </a>
 
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav">
+        <div class="d-flex align-items-center ms-auto d-lg-none">
 
-            <span class="navbar-toggler-icon"></span>
+    <!-- Notification -->
+    <div class="dropdown me-3 d-lg-none">
 
-        </button>
+        <a class="nav-link position-relative text-white"
+           href="#"
+           role="button"
+           data-bs-toggle="dropdown">
+
+            <i class="bi bi-bell-fill fs-5"></i>
+
+            {% if unread_count > 0 %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ unread_count }}
+            </span>
+            {% endif %}
+
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-end notification-dropdown p-0" style="width:380px;min-width:380px;max-width:380px;">
+
+            <div class="p-3 border-bottom">
+                <h6 class="fw-bold mb-0">
+                    🔔 Notifications
+                </h6>
+            </div>
+
+            {% if notifications %}
+
+                {% for notification in notifications %}
+
+                <div class="px-3 py-2 border-bottom">
+
+                    <div class="d-flex justify-content-between">
+
+                        <strong>{{ notification.title }}</strong>
+
+                        {% if not notification.is_read %}
+                        <span class="badge bg-danger">New</span>
+                        {% endif %}
+
+                    </div>
+
+                    <small class="text-muted">
+                        {{ notification.message }}
+                    </small>
+
+                    <br>
+
+                    <small class="text-secondary">
+                        {{ notification.created_at|timesince }} ago
+                    </small>
+
+                </div>
+
+                {% endfor %}
+
+            {% else %}
+
+               <div class="text-center py-5">
+
+                    <i class="bi bi-bell-slash display-4 text-muted"></i>
+
+                    <h5 class="mt-3 mb-2">
+                        No Notifications
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        You're all caught up.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+            <div class="text-center p-2 border-top">
+
+                <a href="{% url 'notifications' %}"
+                   class="text-decoration-none fw-semibold">
+
+                    View All
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Hamburger -->
+
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav">
+
+        <span class="navbar-toggler-icon"></span>
+
+    </button>
+
+</div>
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
@@ -50,6 +145,120 @@
                     </a>
                 </li>
 
+                <!-- Reports -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reports' %}">
+                        <i class="bi bi-bar-chart-line"></i>
+                        Reports
+                    </a>
+                </li>
+
+                <!-- Notifications -->
+               <li class="nav-item dropdown ms-lg-2 d-none d-lg-block">
+
+                    <a class="nav-link position-relative"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown">
+
+                        <i class="bi bi-bell-fill fs-5"></i>
+
+                        {% if unread_count > 0 %}
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+
+                            {{ unread_count }}
+
+                        </span>
+                        {% endif %}
+
+                    </a>
+
+                    <div class="dropdown-menu dropdown-menu-end notification-dropdown p-0" style="width:380px;min-width:380px;max-width:380px;">
+
+                        <div class="p-3 border-bottom">
+
+                            <h6 class="fw-bold mb-0">
+                                🔔 Notifications
+                            </h6>
+
+                        </div>
+
+                        {% if notifications %}
+
+                            {% for notification in notifications %}
+
+                            <div class="px-3 py-2 border-bottom">
+
+                                <div class="d-flex justify-content-between">
+
+                                    <strong>
+
+                                        {{ notification.title }}
+
+                                    </strong>
+
+                                    {% if not notification.is_read %}
+                                    <span class="badge bg-danger">
+
+                                        New
+
+                                    </span>
+                                    {% endif %}
+
+                                </div>
+
+                                <small class="text-muted">
+
+                                    {{ notification.message }}
+
+                                </small>
+
+                                <br>
+
+                                <small class="text-secondary">
+
+                                    {{ notification.created_at|timesince }} ago
+
+                                </small>
+
+                            </div>
+
+                            {% endfor %}
+
+                        {% else %}
+
+                            <div class="text-center py-5">
+
+                                <i class="bi bi-bell-slash display-4 text-muted"></i>
+
+                                <h5 class="mt-3 mb-2">
+                                    No Notifications
+                                </h5>
+
+                                <p class="text-muted mb-0">
+                                    You're all caught up.
+                                </p>
+
+                            </div>
+
+                        {% endif %}
+
+                        <div class="text-center p-2 border-top">
+
+                            <a href="{% url 'notifications' %}"
+                               class="text-decoration-none fw-semibold">
+
+                                View All
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </li>
+
+                <!-- Profile -->
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'profile' %}">
                         <i class="bi bi-person-circle"></i>
@@ -57,6 +266,7 @@
                     </a>
                 </li>
 
+                <!-- Logout -->
                 <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
                     <a class="btn btn-danger" href="{% url 'logout' %}">
                         <i class="bi bi-box-arrow-right"></i>

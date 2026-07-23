@@ -1,101 +1,59 @@
-{% extends 'base.html' %}
-
-{% block title %}Create Budget | BudgetBuddy{% endblock %}
-
+{% extends 'base.html' %} 
+{% block title %}
+Create Budget | BudgetBuddy
+{%endblock %} 
 {% block content %}
 
 <div class="container py-4">
+  <div class="mb-4">
+    <h2 class="fw-bold text-warning">
+      <i class="bi bi-wallet-fill"></i>
 
-<div class="mb-4">
+      Create Monthly Budget
+    </h2>
 
-<h2 class="fw-bold text-warning">
+    <p class="text-muted">Set a spending limit for the selected month.</p>
+  </div>
 
-<i class="bi bi-wallet-fill"></i>
+  <div class="card border-0 shadow rounded-4">
+    <div class="card-body p-4">
+      <form method="POST">
+        {% csrf_token %}
 
-Create Monthly Budget
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label class="form-label"> Budget Amount </label>
 
-</h2>
+            {{ form.amount }}
+          </div>
 
-<p class="text-muted">
+          <div class="col-md-4 mb-3">
+            <label class="form-label"> Month </label>
 
-Set a spending limit for the selected month.
+            {{ form.month }}
+          </div>
 
-</p>
+          <div class="col-md-4 mb-3">
+            <label class="form-label"> Year </label>
 
-</div>
+            {{ form.year }}
+          </div>
+        </div>
 
-<div class="card border-0 shadow rounded-4">
+        <div class="d-flex justify-content-end">
+          <a href="{% url 'budget_list' %}" class="btn btn-secondary me-2">
+            Cancel
+          </a>
 
-<div class="card-body p-4">
+          <button class="btn btn-warning">
+            <i class="bi bi-check-circle"></i>
 
-<form method="POST">
-
-{% csrf_token %}
-
-<div class="row">
-
-<div class="col-md-4 mb-3">
-
-<label class="form-label">
-
-Budget Amount
-
-</label>
-
-{{ form.amount }}
-
-</div>
-
-<div class="col-md-4 mb-3">
-
-<label class="form-label">
-
-Month
-
-</label>
-
-{{ form.month }}
-
-</div>
-
-<div class="col-md-4 mb-3">
-
-<label class="form-label">
-
-Year
-
-</label>
-
-{{ form.year }}
-
-</div>
-
-</div>
-
-<div class="d-flex justify-content-end">
-
-<a href="{% url 'budget_list' %}" class="btn btn-secondary me-2">
-
-Cancel
-
-</a>
-
-<button class="btn btn-warning">
-
-<i class="bi bi-check-circle"></i>
-
-Save Budget
-
-</button>
-
-</div>
-
-</form>
-
-</div>
-
-</div>
-
+            Save Budget
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

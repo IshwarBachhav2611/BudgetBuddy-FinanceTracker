@@ -1,0 +1,566 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports | BudgetBuddy{% endblock %}
+
+{% block content %}
+<!-- Page Heading -->
+<div class="text-center mb-4">
+
+    <h2 class="fw-bold mb-2">
+        <i class="bi bi-graph-up-arrow text-primary"></i>
+        Reports & Analytics
+    </h2>
+
+    <p class="text-muted mb-0">
+        View, analyze and export your financial reports.
+    </p>
+
+</div>
+
+<!-- Filter Card -->
+<div class="card border-0 shadow rounded-4 mb-4">
+
+    <div class="card-body p-4">
+
+        <form method="GET">
+
+            <!-- Filters -->
+            <div class="row g-3">
+
+                <!-- Report Type -->
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        <i class="bi bi-file-earmark-bar-graph"></i>
+                        Report Type
+                    </label>
+
+                    <select class="form-select" name="type">
+
+                        <option value="monthly"
+                            {% if report_type == "monthly" %}selected{% endif %}>
+                            Monthly
+                        </option>
+
+                        <option value="yearly"
+                            {% if report_type == "yearly" %}selected{% endif %}>
+                            Yearly
+                        </option>
+
+                        <option value="all"
+                            {% if report_type == "all" %}selected{% endif %}>
+                            All Time
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- Month -->
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        <i class="bi bi-calendar-month"></i>
+                        Month
+                    </label>
+
+                    <select class="form-select" name="month">
+
+                        {% for m in available_months %}
+
+                        <option value="{{ m.month }}"
+                            {% if m.month == selected_month %}selected{% endif %}>
+
+                            {{ m|date:"F Y" }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <!-- Year -->
+                <div class="col-lg-4 col-md-6">
+
+                    <label class="form-label fw-semibold">
+                        <i class="bi bi-calendar3"></i>
+                        Year
+                    </label>
+
+                    <select class="form-select" name="year">
+
+                        {% for year in available_years %}
+
+                        <option value="{{ year }}"
+                            {% if selected_year == year %}selected{% endif %}>
+
+                            {{ year }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="row mt-4 justify-content-center">
+
+                <div class="col-lg-3 col-md-6 mb-2">
+
+                    <button class="btn btn-primary w-100 py-2">
+
+                        <i class="bi bi-search"></i>
+
+                        Generate Report
+
+                    </button>
+
+                </div>
+
+                <div class="col-lg-3 col-md-6 mb-2">
+
+                    <a href="{% url 'export_report_pdf' %}?type={{ report_type }}&month={{ selected_month }}&year={{ selected_year }}"
+                       class="btn btn-danger w-100 py-2">
+
+                        <i class="bi bi-file-earmark-pdf-fill"></i>
+
+                        Download PDF
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+<!--Summary -->
+<div class="row g-4">
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-cash-stack display-6 text-success"></i>
+
+                <h6 class="mt-3 text-muted">
+
+                    Income
+
+                </h6>
+
+                <h3 class="fw-bold text-success">
+
+                    ₹ {{ report_income }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-wallet2 display-6 text-danger"></i>
+
+                <h6 class="mt-3 text-muted">
+
+                    Expense
+
+                </h6>
+
+                <h3 class="fw-bold text-danger">
+
+                    ₹ {{ report_expense }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-wallet-fill display-6 text-warning"></i>
+
+                <h6 class="mt-3 text-muted">
+
+                    Budget
+
+                </h6>
+
+                <h3 class="fw-bold text-warning">
+
+                    ₹ {{ report_budget }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-piggy-bank display-6 text-primary"></i>
+
+                <h6 class="mt-3 text-muted">
+
+                    Savings
+
+                </h6>
+
+                <h3 class="fw-bold text-primary">
+
+                    ₹ {{ report_savings }}
+
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Reports -->
+<div class="row mt-5 g-4">
+
+    <!-- Financial Chart -->
+    <div class="col-12 col-lg-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-header bg-white border-0">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-pie-chart-fill text-primary"></i>
+                    Financial Overview
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <div style="height:300px;">
+                    <canvas id="financeChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Expense Chart -->
+    <div class="col-12 col-lg-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-header bg-white border-0">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-pie-chart-fill text-danger"></i>
+                    Expense by Category
+                </h5>
+            </div>
+
+            <div class="card-body">
+                <div style="height:300px;">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="row mt-4 g-4">
+
+    <!-- Income vs Expense -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-bar-chart-fill text-success"></i>
+
+                    Income vs Expense
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div style="height:300px;">
+
+                    <canvas id="incomeExpenseChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Monthly Trend -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow rounded-4 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-graph-up-arrow text-primary"></i>
+
+                    Monthly Financial Trend
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div style="height:300px;">
+
+                    <canvas id="trendChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+
+<script>
+
+const income = Number("{{ chart_income }}");
+const expense = Number("{{ chart_expense }}");
+const savings = Number("{{ chart_savings }}");
+
+const ctx = document.getElementById("financeChart");
+
+new Chart(ctx, {
+    type: "pie",
+    data: {
+        labels: ["Income", "Expense", "Savings"],
+        datasets: [{
+            data: [income, expense, savings],
+            backgroundColor: [
+                "#198754",
+                "#dc3545",
+                "#0d6efd"
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: "bottom"
+            }
+        }
+    }
+});
+
+const expenseCtx = document.getElementById("expenseChart");
+
+new Chart(expenseCtx, {
+
+    type: "pie",
+
+    data: {
+
+        labels: {{ expense_labels|safe }},
+
+        datasets: [{
+
+            data: {{ expense_values|safe }}
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                position: "bottom"
+
+            }
+
+        }
+
+    }
+
+});
+
+const incomeExpenseCtx = document.getElementById("incomeExpenseChart");
+
+new Chart(incomeExpenseCtx, {
+
+    type: "bar",
+
+    data: {
+
+        labels: ["Income", "Expense"],
+
+        datasets: [{
+
+            label: "Amount",
+
+            data: [
+                {{ chart_income }},
+                {{ chart_expense }}
+            ],
+
+            backgroundColor: [
+                "#198754",
+                "#dc3545"
+            ]
+
+        }]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                display: false
+
+            }
+
+        }
+
+    }
+
+});
+
+const trendCtx = document.getElementById("trendChart");
+
+new Chart(trendCtx, {
+
+    type: "line",
+
+    data: {
+
+        labels: {{ months|safe }},
+
+        datasets: [
+
+            {
+
+                label: "Income",
+
+                data: {{ income_trend|safe }},
+
+                borderColor: "#198754",
+
+                tension: 0.3
+
+            },
+
+            {
+
+                label: "Expense",
+
+                data: {{ expense_trend|safe }},
+
+                borderColor: "#dc3545",
+
+                tension: 0.3
+
+            },
+
+            {
+
+                label: "Savings",
+
+                data: {{ saving_trend|safe }},
+
+                borderColor: "#0d6efd",
+
+                tension: 0.3
+
+            }
+
+        ]
+
+    },
+
+    options: {
+
+        responsive: true,
+
+        maintainAspectRatio: false,
+
+        plugins: {
+
+            legend: {
+
+                position: "bottom"
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endblock %}

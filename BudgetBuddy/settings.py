@@ -43,11 +43,11 @@ MY_APPS = [
     'apps.accounts',
     'apps.dashboard',
     'apps.finance',
-    'apps.budgets',
-    'apps.reports',
-    'apps.common',
     "apps.income",
     'apps.expense',
+    'apps.budgets',
+    'apps.reports',
+    "apps.notifications",
 ]
 
 INSTALLED_APPS += MY_APPS;
@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "apps.notifications.context_processors.notification_context",
             ],
         },
     },

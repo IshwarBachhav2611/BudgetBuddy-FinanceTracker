@@ -75,6 +75,65 @@
 
     </div>
 
+    <!-- Month Year Filteter-->
+     <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+    <div class="card-body">
+
+        <form method="GET">
+
+            <div class="row align-items-end">
+
+                <div class="col-md-9">
+
+                    <label class="form-label fw-semibold">
+
+                        <i class="bi bi-calendar3"></i>
+
+                        Select Month
+
+                    </label>
+
+                    <select
+                        name="month"
+                        class="form-select">
+
+                        {% for month in available_months %}
+
+                        <option
+                            value="{{ month|date:'Y-m' }}"
+                            {% if month == selected_month %}selected{% endif %}>
+
+                            {{ month|date:"F Y" }}
+
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <button class="btn btn-danger w-100">
+
+                        <i class="bi bi-funnel-fill"></i>
+
+                        Apply
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
     {% if expenses %}
 
     <!-- Expense Table -->

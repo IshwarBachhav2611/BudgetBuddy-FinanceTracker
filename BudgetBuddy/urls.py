@@ -19,6 +19,9 @@ path("expense/", include("apps.expense.urls")),
 path("budgets/", include("apps.budgets.urls")),
 
 path("reports/", include("apps.reports.urls")),
+
+path("notifications/",include("apps.notifications.urls")),
+     
 ]
 
 if settings.DEBUG:
