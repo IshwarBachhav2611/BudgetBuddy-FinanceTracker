@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
 ]
 
 MY_APPS = [
@@ -48,6 +49,8 @@ MY_APPS = [
     'apps.budgets',
     'apps.reports',
     "apps.notifications",
+    "apps.api",
+    
 ]
 
 INSTALLED_APPS += MY_APPS;

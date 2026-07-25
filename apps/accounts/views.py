@@ -9,7 +9,7 @@ from apps.budgets.models import Budget
 from apps.expense.models import Expense
 from apps.income.models import Income
 from apps.notifications.utils import create_notification
-
+from apps.notifications.models import Notification
 
 from .forms import (
     RegisterForm,
@@ -31,17 +31,19 @@ def register_view(request):
 
         if form.is_valid():
 
-            User.objects.create_user(
+            user = User.objects.create_user(
                 first_name=form.cleaned_data["first_name"],
                 last_name=form.cleaned_data["last_name"],
                 username=form.cleaned_data["username"],
                 email=form.cleaned_data["email"],
                 password=form.cleaned_data["password"],
             )
+
             create_notification(
                 user,
                 "Welcome to BudgetBuddy 🎉",
-                "Start tracking your income and expenses today."
+                "Start tracking your income and expenses today.",
+                "success",
             )
 
             messages.success(request, "Registration Successful!")
@@ -212,12 +214,18 @@ def dashboard_view(request):
             alert_message = (
                 f"You have exceeded this month's budget by ₹ {extra:.2f}."
             )
-            create_notification(
-                request.user,
-                "Budget Exceeded",
-                alert_message,
-                "danger",
-            )
+
+            if not Notification.objects.filter(
+                user=request.user,
+                title="Budget Exceeded"
+            ).exists():
+
+                create_notification(
+                    request.user,
+                    "Budget Exceeded",
+                    alert_message,
+                    "danger",
+                )
 
         elif usage >= 85:
 
@@ -229,12 +237,18 @@ def dashboard_view(request):
                 f"You have used {usage:.0f}% of your budget. "
                 f"Only ₹ {remaining:.2f} remaining."
             )
-            create_notification(
-                request.user,
-                "Budget Warning",
-                alert_message,
-                "warning",
-            )
+
+            if not Notification.objects.filter(
+                user=request.user,
+                title="Budget Warning"
+            ).exists():
+
+                create_notification(
+                    request.user,
+                    "Budget Warning",
+                    alert_message,
+                    "warning",
+                )
 
         else:
 

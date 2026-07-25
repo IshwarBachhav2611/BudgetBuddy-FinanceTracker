@@ -21,6 +21,8 @@ path("budgets/", include("apps.budgets.urls")),
 path("reports/", include("apps.reports.urls")),
 
 path("notifications/",include("apps.notifications.urls")),
+
+path("api/", include("apps.api.urls")),
      
 ]
 

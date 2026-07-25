@@ -6,6 +6,8 @@ from .forms import ExpenseForm
 from .models import Expense
 from datetime import date
 from django.db.models.functions import TruncMonth
+from apps.notifications.utils import create_notification
+
 
 @login_required
 def expense_list(request):
@@ -82,8 +84,17 @@ def add_expense(request):
 
             expense = form.save(commit=False)
             expense.user = request.user
+
             expense.save()
 
+            create_notification(
+                request.user,
+                "Expense Added",
+                f"₹{expense.amount} spent on {expense.category}.",
+                "warning",
+                "/expense/",
+            )
+            
             messages.success(request, "Expense added successfully!")
 
             return redirect("expense_list")
@@ -123,6 +134,14 @@ def edit_expense(request, expense_id):
 
             form.save()
 
+            create_notification(
+                request.user,
+                "Expense Updated",
+                f"{expense.category} expense was updated.",
+                "info",
+                "/expense/",
+            )
+
             messages.success(
                 request,
                 "Expense updated successfully!"
@@ -156,8 +175,19 @@ def delete_expense(request, expense_id):
 
     if request.method == "POST":
 
+        category = expense.category
+        amount = expense.amount
+
         expense.delete()
 
+        create_notification(
+            request.user,
+            "Expense Deleted",
+            f"₹{amount} expense from {category} was deleted.",
+            "danger",
+            "/expense/",
+        )
+        
         messages.success(
             request,
             "Expense deleted successfully!"

@@ -10,6 +10,8 @@ from django.db.models.functions import TruncMonth
 from datetime import date
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
+from apps.notifications.utils import create_notification
+
 
 @login_required
 def income_list(request):
@@ -82,6 +84,14 @@ def add_income(request):
 
             income.save()
 
+            create_notification(
+                request.user,
+                "Income Added",
+                f"₹{income.amount} added as {income.source}.",
+                "success",
+                "/income/",
+            )
+
             messages.success(request, "Income added successfully!")
 
             return redirect("income_list")
@@ -118,6 +128,14 @@ def edit_income(request, id):
 
             form.save()
 
+            create_notification(
+                request.user,
+                "Income Updated",
+                f"{income.source} income was updated.",
+                "info",
+                "/income/",
+            )
+
             messages.success(
                 request,
                 "Income updated successfully!"
@@ -150,7 +168,18 @@ def delete_income(request, id):
 
     if request.method == "POST":
 
+        source = income.source
+        amount = income.amount
+
         income.delete()
+
+        create_notification(
+            request.user,
+            "Income Deleted",
+            f"₹{amount} from {source} was deleted.",
+            "danger",
+            "/income/",
+        )
 
         messages.success(
             request,

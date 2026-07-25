@@ -6,7 +6,7 @@ from .models import Budget
 from datetime import date
 from django.db.models.functions import TruncMonth
 from django.db.models import Sum
-
+from apps.notifications.utils import create_notification
 
 @login_required
 def budget_list(request):
@@ -102,6 +102,14 @@ def add_budget(request):
 
             budget.save()
 
+            create_notification(
+                request.user,
+                "Budget Created",
+                f"Monthly budget of ₹{budget.amount} has been created.",
+                "success",
+                "/budget/",
+            )
+
             messages.success(
                 request,
                 "Budget created successfully!"
@@ -142,6 +150,14 @@ def edit_budget(request, id):
 
             form.save()
 
+            create_notification(
+                request.user,
+                "Budget Updated",
+                f"Budget updated to ₹{budget.amount}.",
+                "info",
+                "/budget/",
+            )
+            
             messages.success(
                 request,
                 "Budget updated successfully!"
@@ -173,7 +189,16 @@ def delete_budget(request, id):
 
     if request.method == "POST":
 
+        amount = budget.amount
         budget.delete()
+
+        create_notification(
+            request.user,
+            "Budget Deleted",
+            f"Budget of ₹{amount} was deleted.",
+            "danger",
+            "/budget/",
+        )
 
         messages.success(
             request,
