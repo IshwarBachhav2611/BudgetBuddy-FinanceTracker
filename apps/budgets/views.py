@@ -8,6 +8,8 @@ from django.db.models.functions import TruncMonth
 from django.db.models import Sum
 from apps.notifications.utils import create_notification
 
+from apps.activity_logger import log_activity
+
 @login_required
 def budget_list(request):
 
@@ -102,6 +104,16 @@ def add_budget(request):
 
             budget.save()
 
+            log_activity(
+                request.user,
+                "Budget Created",
+                {
+                    "amount": float(budget.amount),
+                    "month": budget.month,
+                    "year": budget.year,
+                }
+            )
+
             create_notification(
                 request.user,
                 "Budget Created",
@@ -150,6 +162,16 @@ def edit_budget(request, id):
 
             form.save()
 
+            log_activity(
+                request.user,
+                "Budget Updated",
+                {
+                    "amount": float(budget.amount),
+                    "month": budget.month,
+                    "year": budget.year,
+                }
+            )
+
             create_notification(
                 request.user,
                 "Budget Updated",
@@ -191,6 +213,16 @@ def delete_budget(request, id):
 
         amount = budget.amount
         budget.delete()
+
+        log_activity(
+            request.user,
+            "Budget Deleted",
+            {
+                "amount": float(amount),
+                "month": budget.month,
+                "year": budget.year,
+            }
+        )
 
         create_notification(
             request.user,

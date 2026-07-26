@@ -7,7 +7,7 @@ from .models import Expense
 from datetime import date
 from django.db.models.functions import TruncMonth
 from apps.notifications.utils import create_notification
-
+from apps.activity_logger import log_activity
 
 @login_required
 def expense_list(request):
@@ -87,6 +87,18 @@ def add_expense(request):
 
             expense.save()
 
+            log_activity(
+                request.user,
+                "Expense Added",
+                {
+                    "title": expense.title,
+                    "amount": float(expense.amount),
+                    "category": expense.category,
+                    "payment_method": expense.payment_method,
+                    "date": str(expense.date),
+                }
+            )
+
             create_notification(
                 request.user,
                 "Expense Added",
@@ -134,6 +146,18 @@ def edit_expense(request, expense_id):
 
             form.save()
 
+            log_activity(
+                request.user,
+                "Expense Updated",
+                {
+                    "title": expense.title,
+                    "amount": float(expense.amount),
+                    "category": expense.category,
+                    "payment_method": expense.payment_method,
+                    "date": str(expense.date),
+                }
+            )
+
             create_notification(
                 request.user,
                 "Expense Updated",
@@ -179,6 +203,18 @@ def delete_expense(request, expense_id):
         amount = expense.amount
 
         expense.delete()
+
+        log_activity(
+            request.user,
+            "Expense Deleted",
+            {
+                "title": expense.title,
+                "amount": float(expense.amount),
+                "category": expense.category,
+                "payment_method": expense.payment_method,
+                "date": str(expense.date),
+            }
+        )
 
         create_notification(
             request.user,

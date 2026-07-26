@@ -50,6 +50,7 @@ MY_APPS = [
     'apps.reports',
     "apps.notifications",
     "apps.api",
+    "apps.activity_logs",
     
 ]
 

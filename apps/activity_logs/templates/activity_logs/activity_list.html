@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}
+Activity Logs
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="fw-bold">
+                Activity Logs
+            </h2>
+
+            <p class="text-muted">
+                Your recent account activity stored in MongoDB.
+            </p>
+        </div>
+
+    </div>
+
+    {% if activities %}
+
+    <div class="card shadow-sm">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle mb-0">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>Date & Time</th>
+
+                        <th>Action</th>
+
+                        <th>Details</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for log in activities %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ log.created_at }}
+
+                        </td>
+
+                        <td>
+
+                            {% if "Added" in log.action %}
+
+                                <span class="badge bg-success">
+                                    {{ log.action }}
+                                </span>
+
+                            {% elif "Deleted" in log.action %}
+
+                                <span class="badge bg-danger">
+                                    {{ log.action }}
+                                </span>
+
+                            {% elif "Updated" in log.action %}
+
+                                <span class="badge bg-primary">
+                                    {{ log.action }}
+                                </span>
+
+                            {% elif "Login" in log.action %}
+
+                                <span class="badge bg-info">
+                                    {{ log.action }}
+                                </span>
+
+                            {% elif "Logout" in log.action %}
+
+                                <span class="badge bg-secondary">
+                                    {{ log.action }}
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-dark">
+                                    {{ log.action }}
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <pre class="mb-0">{{ log.details }}</pre>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <div class="card shadow-sm">
+
+        <div class="card-body text-center">
+
+            <h5>No Activity Found</h5>
+
+            <p class="text-muted">
+
+                Your activity logs will appear here.
+
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

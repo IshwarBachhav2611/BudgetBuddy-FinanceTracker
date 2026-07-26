@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Notification
 
+from apps.activity_logger import log_activity
 
 @login_required
 def notification_list(request):
@@ -33,6 +34,15 @@ def mark_notification_read(request, id):
     notification.is_read = True
     notification.save()
 
+    log_activity(
+        request.user,
+        "Notification Read",
+        {
+            "title": notification.title,
+            "type": notification.notification_type,
+        }
+    )
+    
     if notification.action_url:
         return redirect(notification.action_url)
 
@@ -42,10 +52,23 @@ def mark_notification_read(request, id):
 @login_required
 def mark_all_read(request):
 
+    count = Notification.objects.filter(
+    user=request.user,
+    is_read=False,
+    ).count()
+
     Notification.objects.filter(
         user=request.user,
         is_read=False,
     ).update(is_read=True)
+
+    log_activity(
+        request.user,
+        "Marked All Notifications Read",
+        {
+            "count": count,
+        }
+    )
 
     messages.success(
         request,
@@ -64,6 +87,12 @@ def delete_notification(request, id):
         user=request.user,
     )
 
+    log_activity(request.user,"Notification Deleted",{
+            "title": notification.title,
+            "type": notification.notification_type,
+        }
+    )
+
     notification.delete()
 
     messages.success(
@@ -77,6 +106,18 @@ def delete_notification(request, id):
 @login_required
 def clear_notifications(request):
 
+    count = Notification.objects.filter(
+    user=request.user
+    ).count()
+
+    log_activity(
+        request.user,
+        "Cleared All Notifications",
+        {
+            "count": count,
+        }
+    )
+
     Notification.objects.filter(
         user=request.user
     ).delete()
@@ -85,5 +126,4 @@ def clear_notifications(request):
         request,
         "All notifications cleared."
     )
-
     return redirect("notifications")

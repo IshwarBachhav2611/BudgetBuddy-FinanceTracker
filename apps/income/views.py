@@ -1,17 +1,15 @@
 from .forms import IncomeForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
 from .models import Income
 from django.shortcuts import get_object_or_404, redirect, render
-from datetime import date
-from django.db.models.functions import TruncMonth
 
 from datetime import date
 from django.db.models import Sum
 from django.db.models.functions import TruncMonth
 from apps.notifications.utils import create_notification
 
+from apps.activity_logger import log_activity
 
 @login_required
 def income_list(request):
@@ -69,6 +67,8 @@ def income_list(request):
         },
     )
 
+
+
 @login_required
 def add_income(request):
 
@@ -83,6 +83,16 @@ def add_income(request):
             income.user = request.user
 
             income.save()
+
+            log_activity(
+                request.user,
+                "Income Added",
+                {
+                    "source": income.source,
+                    "amount": float(income.amount),
+                    "date": str(income.date),
+                }
+            )
 
             create_notification(
                 request.user,
@@ -128,6 +138,16 @@ def edit_income(request, id):
 
             form.save()
 
+            log_activity(
+                request.user,
+                "Income Updated",
+                {
+                    "source": income.source,
+                    "amount": float(income.amount),
+                    "date": str(income.date),
+                }
+            )
+
             create_notification(
                 request.user,
                 "Income Updated",
@@ -172,6 +192,15 @@ def delete_income(request, id):
         amount = income.amount
 
         income.delete()
+
+        log_activity(
+            request.user,
+            "Income Deleted",
+            {
+                "source": source,
+                "amount": float(amount),
+            }
+        )
 
         create_notification(
             request.user,

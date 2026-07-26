@@ -10,6 +10,7 @@ from apps.expense.models import Expense
 from apps.income.models import Income
 from apps.notifications.utils import create_notification
 from apps.notifications.models import Notification
+from apps.activity_logger import log_activity
 
 from .forms import (
     RegisterForm,
@@ -46,6 +47,13 @@ def register_view(request):
                 "success",
             )
 
+            log_activity(
+                user,
+                "User Registered",
+                {
+                    "email": user.email,
+                }
+            )
             messages.success(request, "Registration Successful!")
 
             return redirect("login")
@@ -77,12 +85,23 @@ def login_view(request):
             user = form.cleaned_data["user"]
 
             login(request, user)
+
+            log_activity(
+                user,
+                "User Logged In",
+                {
+                    "ip": request.META.get("REMOTE_ADDR"),
+                    "browser": request.META.get("HTTP_USER_AGENT"),
+                }
+            )
+
             create_notification(
                 user,
                 "Login Successful",
                 "Welcome back to BudgetBuddy.",
                 "info",
             )
+
 
             messages.success(
                 request,
@@ -106,6 +125,16 @@ def login_view(request):
 
 def logout_view(request):
 
+    if request.user.is_authenticated:
+
+        log_activity(
+            request.user,
+            "User Logged Out",
+            {
+                "ip": request.META.get("REMOTE_ADDR"),
+            }
+        )
+
     logout(request)
 
     messages.success(
@@ -114,7 +143,6 @@ def logout_view(request):
     )
 
     return redirect("landing")
-
 
 # ==========================
 # Dashboard
@@ -335,6 +363,14 @@ def edit_profile_view(request):
         if form.is_valid():
 
             form.save()
+
+            log_activity(
+                request.user,
+                "Profile Updated",
+                {
+                    "username": request.user.username,
+                }
+            )
             create_notification(
                 request.user,
                 "Profile Updated",
@@ -377,6 +413,12 @@ def change_password_view(request):
         if form.is_valid():
 
             user = form.save()
+
+            log_activity(
+                request.user,
+                "Password Changed",
+                {}
+            )
 
             create_notification(
                 request.user,

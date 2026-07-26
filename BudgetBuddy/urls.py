@@ -23,7 +23,8 @@ path("reports/", include("apps.reports.urls")),
 path("notifications/",include("apps.notifications.urls")),
 
 path("api/", include("apps.api.urls")),
-     
+
+path("activity/", include("apps.activity_logs.urls")),
 ]
 
 if settings.DEBUG:
