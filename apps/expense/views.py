@@ -102,17 +102,14 @@ def add_expense(request):
             create_notification(
                 request.user,
                 "Expense Added",
-                f"₹{expense.amount} spent on {expense.category}.",
+                f"₹{expense.amount} spent on '{expense.title}'.",
                 "warning",
-                "/expense/",
             )
             
             messages.success(request, "Expense added successfully!")
 
             return redirect("expense_list")
 
-        else:
-            print(form.errors)   # Shows errors in terminal
 
     else:
 
@@ -163,7 +160,6 @@ def edit_expense(request, expense_id):
                 "Expense Updated",
                 f"{expense.category} expense was updated.",
                 "info",
-                "/expense/",
             )
 
             messages.success(
@@ -199,7 +195,10 @@ def delete_expense(request, expense_id):
 
     if request.method == "POST":
 
+        title = expense.title
         category = expense.category
+        payment_method = expense.payment_method
+        expense_date = expense.date
         amount = expense.amount
 
         expense.delete()
@@ -208,20 +207,19 @@ def delete_expense(request, expense_id):
             request.user,
             "Expense Deleted",
             {
-                "title": expense.title,
-                "amount": float(expense.amount),
-                "category": expense.category,
-                "payment_method": expense.payment_method,
-                "date": str(expense.date),
+                "title": title,
+                "amount": float(amount),
+                "category": category,
+                "payment_method": payment_method,
+                "date": str(expense_date),
             }
         )
 
         create_notification(
             request.user,
             "Expense Deleted",
-            f"₹{amount} expense from {category} was deleted.",
+            f"₹{amount} expense '{expense.title}' was deleted.",
             "danger",
-            "/expense/",
         )
         
         messages.success(

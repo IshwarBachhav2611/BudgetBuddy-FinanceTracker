@@ -25,12 +25,30 @@
     <!-- Page Specific CSS -->
     {% block extra_css %}{% endblock %}
   </head>
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const toastElements = document.querySelectorAll(".toast");
+
+    toastElements.forEach(function (toastElement) {
+
+        const toast = new bootstrap.Toast(toastElement, {
+            delay: 3500
+        });
+
+        toast.show();
+
+    });
+
+});
+</script>
 
   <body class="d-flex flex-column min-vh-100">
 
     <!-- Navbar -->
     {% include 'includes/navbar.html' %}
 
+    {% include "includes/toast.html" %}
     <!-- Messages -->
     {% include 'includes/messages.html' %}
 

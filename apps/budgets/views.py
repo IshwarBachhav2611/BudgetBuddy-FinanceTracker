@@ -7,7 +7,7 @@ from datetime import date
 from django.db.models.functions import TruncMonth
 from django.db.models import Sum
 from apps.notifications.utils import create_notification
-
+from calendar import month_name
 from apps.activity_logger import log_activity
 
 @login_required
@@ -102,6 +102,23 @@ def add_budget(request):
 
             budget.user = request.user
 
+            existing_budget = Budget.objects.filter(
+                user=request.user,
+                month=budget.month,
+                year=budget.year,
+            ).exists()
+
+            if existing_budget:
+                messages.warning(
+                    request,
+                    f"A budget for {month_name[budget.month]} {budget.year} already exists. Please edit the existing budget."
+                )
+                return render(
+                    request,
+                    "budgets/add_budget.html",
+                    {"form": form},
+                )
+
             budget.save()
 
             log_activity(
@@ -119,7 +136,6 @@ def add_budget(request):
                 "Budget Created",
                 f"Monthly budget of ₹{budget.amount} has been created.",
                 "success",
-                "/budget/",
             )
 
             messages.success(
@@ -177,7 +193,6 @@ def edit_budget(request, id):
                 "Budget Updated",
                 f"Budget updated to ₹{budget.amount}.",
                 "info",
-                "/budget/",
             )
             
             messages.success(
@@ -212,6 +227,9 @@ def delete_budget(request, id):
     if request.method == "POST":
 
         amount = budget.amount
+        month = budget.month
+        year = budget.year
+
         budget.delete()
 
         log_activity(
@@ -219,8 +237,8 @@ def delete_budget(request, id):
             "Budget Deleted",
             {
                 "amount": float(amount),
-                "month": budget.month,
-                "year": budget.year,
+                "month": month,
+                "year": year,
             }
         )
 
@@ -229,7 +247,6 @@ def delete_budget(request, id):
             "Budget Deleted",
             f"Budget of ₹{amount} was deleted.",
             "danger",
-            "/budget/",
         )
 
         messages.success(

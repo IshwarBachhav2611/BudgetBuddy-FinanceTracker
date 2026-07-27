@@ -83,12 +83,12 @@ def add_income(request):
             income.user = request.user
 
             income.save()
-
             log_activity(
                 request.user,
                 "Income Added",
                 {
-                    "source": income.source,
+                    "title": income.title,
+                    "category": income.category,
                     "amount": float(income.amount),
                     "date": str(income.date),
                 }
@@ -97,11 +97,10 @@ def add_income(request):
             create_notification(
                 request.user,
                 "Income Added",
-                f"₹{income.amount} added as {income.source}.",
+                f"₹{income.amount} added for '{income.title}'.",
                 "success",
-                "/income/",
             )
-
+ 
             messages.success(request, "Income added successfully!")
 
             return redirect("income_list")
@@ -142,7 +141,8 @@ def edit_income(request, id):
                 request.user,
                 "Income Updated",
                 {
-                    "source": income.source,
+                    "title": income.title,
+                    "category": income.category,
                     "amount": float(income.amount),
                     "date": str(income.date),
                 }
@@ -151,11 +151,9 @@ def edit_income(request, id):
             create_notification(
                 request.user,
                 "Income Updated",
-                f"{income.source} income was updated.",
+                f"'{income.title}' income was updated.",
                 "info",
-                "/income/",
             )
-
             messages.success(
                 request,
                 "Income updated successfully!"
@@ -188,7 +186,8 @@ def delete_income(request, id):
 
     if request.method == "POST":
 
-        source = income.source
+        title = income.title
+        category = income.category
         amount = income.amount
 
         income.delete()
@@ -197,7 +196,8 @@ def delete_income(request, id):
             request.user,
             "Income Deleted",
             {
-                "source": source,
+                "title": title,
+                "category": category,
                 "amount": float(amount),
             }
         )
@@ -205,9 +205,8 @@ def delete_income(request, id):
         create_notification(
             request.user,
             "Income Deleted",
-            f"₹{amount} from {source} was deleted.",
+            f"₹{amount} from '{title}' was deleted.",
             "danger",
-            "/income/",
         )
 
         messages.success(

@@ -1,47 +1,70 @@
+# ==========================
 # Python
+# ==========================
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual Environment
+# ==========================
+# Virtual Environments
+# ==========================
 venv/
 env/
 .venv/
 
+# ==========================
 # Django
+# ==========================
 db.sqlite3
 *.sqlite3
-
-# Media Files
 media/
+staticfiles/
 
+# ==========================
 # Environment Variables
+# ==========================
 .env
 
-# VS Code
+# ==========================
+# IDEs
+# ==========================
 .vscode/
-
-# PyCharm
 .idea/
 
-# macOS
+# ==========================
+# Operating System Files
+# ==========================
 .DS_Store
-
-# Windows
 Thumbs.db
+desktop.ini
 
+# ==========================
 # Logs
+# ==========================
 *.log
 
-# Python Cache
+# ==========================
+# Python Cache & Testing
+# ==========================
 .pytest_cache/
 .mypy_cache/
-
-# Coverage
+.pyre/
+.ruff_cache/
 .coverage
 htmlcov/
+.coverage.*
 
-# Build
+# ==========================
+# Build Files
+# ==========================
 build/
 dist/
 *.egg-info/
+.eggs/
+
+# ==========================
+# Miscellaneous
+# ==========================
+*.bak
+*.swp
+*.tmp

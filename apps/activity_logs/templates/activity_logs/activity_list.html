@@ -6,39 +6,58 @@ Activity Logs
 
 {% block content %}
 
-<div class="container mt-4">
+<div class="container py-4">
 
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-            <h2 class="fw-bold">
+
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-clock-history me-2 text-primary"></i>
                 Activity Logs
             </h2>
 
-            <p class="text-muted">
-                Your recent account activity stored in MongoDB.
+            <p class="text-muted mb-0">
+                Track your recent account activities.
             </p>
+
         </div>
+
+        {% if activities %}
+        <span class="badge bg-primary fs-6 px-3 py-2">
+            {{ activities|length }} Activities
+        </span>
+        {% endif %}
 
     </div>
 
     {% if activities %}
 
-    <div class="card shadow-sm">
+    <div class="card border-0 shadow-sm rounded-4">
 
         <div class="table-responsive">
 
             <table class="table table-hover align-middle mb-0">
 
-                <thead class="table-dark">
+                <thead class="table-light">
 
                     <tr>
 
-                        <th>Date & Time</th>
+                        <th width="220">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            Date & Time
+                        </th>
 
-                        <th>Action</th>
+                        <th width="220">
+                            <i class="bi bi-lightning-charge me-1"></i>
+                            Activity
+                        </th>
 
-                        <th>Details</th>
+                        <th>
+                            <i class="bi bi-card-text me-1"></i>
+                            Details
+                        </th>
 
                     </tr>
 
@@ -46,13 +65,19 @@ Activity Logs
 
                 <tbody>
 
-                    {% for log in activities %}
+                {% for log in activities %}
 
                     <tr>
 
                         <td>
 
-                            {{ log.created_at }}
+                            <div class="fw-semibold">
+                                {{ log.created_at|date:"d M Y" }}
+                            </div>
+
+                            <small class="text-muted">
+                                {{ log.created_at|date:"h:i A" }}
+                            </small>
 
                         </td>
 
@@ -60,37 +85,42 @@ Activity Logs
 
                             {% if "Added" in log.action %}
 
-                                <span class="badge bg-success">
-                                    {{ log.action }}
-                                </span>
-
-                            {% elif "Deleted" in log.action %}
-
-                                <span class="badge bg-danger">
+                                <span class="badge bg-success rounded-pill px-3 py-2">
+                                    <i class="bi bi-plus-circle me-1"></i>
                                     {{ log.action }}
                                 </span>
 
                             {% elif "Updated" in log.action %}
 
-                                <span class="badge bg-primary">
+                                <span class="badge bg-primary rounded-pill px-3 py-2">
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    {{ log.action }}
+                                </span>
+
+                            {% elif "Deleted" in log.action %}
+
+                                <span class="badge bg-danger rounded-pill px-3 py-2">
+                                    <i class="bi bi-trash me-1"></i>
                                     {{ log.action }}
                                 </span>
 
                             {% elif "Login" in log.action %}
 
-                                <span class="badge bg-info">
+                                <span class="badge bg-info rounded-pill px-3 py-2">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>
                                     {{ log.action }}
                                 </span>
 
                             {% elif "Logout" in log.action %}
 
-                                <span class="badge bg-secondary">
+                                <span class="badge bg-secondary rounded-pill px-3 py-2">
+                                    <i class="bi bi-box-arrow-right me-1"></i>
                                     {{ log.action }}
                                 </span>
 
                             {% else %}
 
-                                <span class="badge bg-dark">
+                                <span class="badge bg-dark rounded-pill px-3 py-2">
                                     {{ log.action }}
                                 </span>
 
@@ -100,13 +130,15 @@ Activity Logs
 
                         <td>
 
-                            <pre class="mb-0">{{ log.details }}</pre>
+                            <code class="text-dark bg-light rounded p-2 d-block">
+                                {{ log.details }}
+                            </code>
 
                         </td>
 
                     </tr>
 
-                    {% endfor %}
+                {% endfor %}
 
                 </tbody>
 
@@ -118,16 +150,18 @@ Activity Logs
 
     {% else %}
 
-    <div class="card shadow-sm">
+    <div class="card border-0 shadow-sm rounded-4">
 
-        <div class="card-body text-center">
+        <div class="card-body text-center py-5">
 
-            <h5>No Activity Found</h5>
+            <i class="bi bi-clock-history display-1 text-muted"></i>
+
+            <h4 class="mt-3">
+                No Activity Yet
+            </h4>
 
             <p class="text-muted">
-
-                Your activity logs will appear here.
-
+                Your account activities will appear here as you use BudgetBuddy.
             </p>
 
         </div>
