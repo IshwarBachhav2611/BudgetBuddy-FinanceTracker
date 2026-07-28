@@ -49,7 +49,6 @@ INSTALLED_APPS = [
 MY_APPS = [
     'apps.accounts',
     'apps.dashboard',
-    'apps.finance',
     "apps.income",
     'apps.expense',
     'apps.budgets',
