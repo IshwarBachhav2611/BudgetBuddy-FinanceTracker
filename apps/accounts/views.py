@@ -47,13 +47,13 @@ def register_view(request):
                 "success",
             )
 
-            log_activity(
-                user,
-                "User Registered",
-                {
-                    "email": user.email,
-                }
-            )
+            # log_activity(
+            #     user,
+            #     "User Registered",
+            #     {
+            #         "email": user.email,
+            #     }
+            # )
             messages.success(request, "Registration Successful!")
 
             return redirect("login")
@@ -69,7 +69,7 @@ def register_view(request):
             "form": form
         }
     )
-
+ 
 
 def login_view(request):
 
@@ -417,7 +417,7 @@ def change_password_view(request):
             log_activity(
                 request.user,
                 "Password Changed",
-                {}
+                {} 
             )
 
             create_notification(
