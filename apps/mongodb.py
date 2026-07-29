@@ -1,19 +1,22 @@
 import os
-
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-# Load environment variables from .env
 load_dotenv()
 
-# Get MongoDB URI from .env
 MONGO_URI = os.getenv("MONGO_URI")
 
-# Connect to MongoDB Atlas
-client = MongoClient(MONGO_URI)
+client = MongoClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=5000
+)
 
-# Use the BudgetBuddy database
+try:
+    client.admin.command("ping")
+    print("✅ MongoDB Connected Successfully")
+except Exception as e:
+    print("❌ MongoDB Connection Failed")
+    print(e)
+
 db = client["BudgetBuddy"]
-
-# Activity Logs Collection
 activity_logs = db["activity_logs"]
