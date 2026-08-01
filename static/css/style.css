@@ -58,39 +58,18 @@ footer{
 =========================== */
 
 .notification-dropdown{
-    --bs-dropdown-min-width: 380px;
 
-    width: 380px !important;
-    min-width: 380px !important;
-    max-width: 380px !important;
+    width:380px;
+    min-width:380px;
+    max-width:380px;
 
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    border:none;
+    border-radius:15px;
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
 .notification-dropdown .dropdown-item{
     white-space:normal;
-}
-
-/* Tablet */
-
-@media (max-width:992px){
-
-   @media (max-width:576px){
-
-        .notification-dropdown{
-
-            --bs-dropdown-min-width: 340px;
-
-            width: 340px !important;
-            min-width: 340px !important;
-            max-width: 340px !important;
-
-        }
-
-    }
-
 }
 
 /* Mobile */
@@ -99,24 +78,31 @@ footer{
 
     .notification-dropdown{
 
-        width:320px;
-        max-width:calc(100vw - 20px);
+        position:fixed !important;
 
-        right:0 !important;
-        left:auto !important;
+        top:70px;
+        left:10px;
+        right:10px;
 
+        width:auto !important;
+        min-width:auto !important;
+        max-width:none !important;
+
+        margin:0 !important;
         transform:none !important;
 
-        margin-top:12px;
+        max-height:70vh;
+        overflow-y:auto;
 
+        z-index:1055;
     }
 
     .notification-dropdown .display-4{
-        font-size:2.8rem;
+        font-size:2.5rem;
     }
 
     .notification-dropdown h5{
-        font-size:1.15rem;
+        font-size:1.1rem;
     }
 
     .notification-dropdown small{
@@ -130,18 +116,11 @@ footer{
 ========================================== */
 
 .notification-item{
-    border: none;
-    border-left: 5px solid transparent;
-    border-radius: 12px;
-    transition: all .25s ease;
+    border:none;
+    border-left:5px solid transparent;
+    border-radius:12px;
+    transition:all .25s ease;
 }
-
-.notification-item:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0,0,0,.08);
-}
-
-/* Notification Type Borders */
 
 .notification-success{
     border-left-color:#198754;
@@ -161,9 +140,6 @@ footer{
 
 .notification-item .btn{
     border-radius:8px;
-}
-.notification-item{
-    transition:0.25s;
 }
 
 .notification-item:hover{

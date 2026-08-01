@@ -47,13 +47,13 @@ def register_view(request):
                 "success",
             )
 
-            # log_activity(
-            #     user,
-            #     "User Registered",
-            #     {
-            #         "email": user.email,
-            #     }
-            # )
+            log_activity(
+                user,
+                "User Registered",
+                {
+                    "email": user.email,
+                }
+            )
             messages.success(request, "Registration Successful!")
 
             return redirect("login")
@@ -292,6 +292,20 @@ def dashboard_view(request):
     # ---------------------------------
     # Context
     # ---------------------------------
+
+    print("=" * 50)
+    print("Current User:", request.user)
+    print("Today's Date:", today)
+
+    print("Income Count:", incomes.count())
+    print("Expense Count:", expenses.count())
+
+    print("Total Income:", total_income)
+    print("Total Expense:", total_expense)
+
+    print("Month Income:", month_income)
+    print("Month Expense:", month_expense)
+    print("=" * 50)
 
     context = {
 

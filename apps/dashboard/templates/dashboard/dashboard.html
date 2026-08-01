@@ -104,31 +104,129 @@ Dashboard | BudgetBuddy
 
     {% endif %}
 
-<!-- Summary Cards -->
+    <!-- Summary Cards -->
 
-<div class="row g-4 mb-4">
+    <div class="row g-4 mb-4">
 
-    <!-- Current Month Income -->
+        <!-- Current Month Income -->
 
-    <div class="col-lg-3 col-md-6">
+        <div class="col-lg-3 col-md-6">
 
-        <div class="card border-0 shadow rounded-4 h-100">
+            <div class="card border-0 shadow rounded-4 h-100">
 
-            <div class="card-body text-center">
+                <div class="card-body text-center">
 
-                <i class="bi bi-cash-stack display-5 text-success"></i>
+                    <i class="bi bi-cash-stack display-5 text-success"></i>
 
-                <h6 class="text-muted mt-3">
+                    <h6 class="text-muted mt-3">
 
-                    This Month Income
+                        This Month Income
 
-                </h6>
+                    </h6>
 
-                <h3 class="fw-bold text-success">
+                    <h3 class="fw-bold text-success">
 
-                    ₹ {{ month_income }}
+                        ₹ {{ month_income }}
 
-                </h3>
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Current Month Expense -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-wallet2 display-5 text-danger"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        This Month Expense
+
+                    </h6>
+
+                    <h3 class="fw-bold text-danger">
+
+                        ₹ {{ month_expense }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Current Budget -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-wallet-fill display-5 text-warning"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        Monthly Budget
+
+                    </h6>
+
+                    <h3 class="fw-bold text-warning">
+
+                        ₹ {{ current_budget }}
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Total Savings -->
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow rounded-4 h-100">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-bank display-5 text-primary"></i>
+
+                    <h6 class="text-muted mt-3">
+
+                        Total Savings
+
+                    </h6>
+
+                    {% if total_savings >= 0 %}
+
+                    <h3 class="fw-bold text-primary">
+
+                        ₹ {{ total_savings }}
+
+                    </h3>
+
+                    {% else %}
+
+                    <h3 class="fw-bold text-danger">
+
+                        ₹ {{ total_savings }}
+
+                    </h3>
+
+                    {% endif %}
+
+                </div>
 
             </div>
 
@@ -136,102 +234,6 @@ Dashboard | BudgetBuddy
 
     </div>
 
-    <!-- Current Month Expense -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <div class="card border-0 shadow rounded-4 h-100">
-
-            <div class="card-body text-center">
-
-                <i class="bi bi-wallet2 display-5 text-danger"></i>
-
-                <h6 class="text-muted mt-3">
-
-                    This Month Expense
-
-                </h6>
-
-                <h3 class="fw-bold text-danger">
-
-                    ₹ {{ month_expense }}
-
-                </h3>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Current Budget -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <div class="card border-0 shadow rounded-4 h-100">
-
-            <div class="card-body text-center">
-
-                <i class="bi bi-wallet-fill display-5 text-warning"></i>
-
-                <h6 class="text-muted mt-3">
-
-                    Monthly Budget
-
-                </h6>
-
-                <h3 class="fw-bold text-warning">
-
-                    ₹ {{ current_budget }}
-
-                </h3>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Total Savings -->
-
-    <div class="col-lg-3 col-md-6">
-
-        <div class="card border-0 shadow rounded-4 h-100">
-
-            <div class="card-body text-center">
-
-                <i class="bi bi-bank display-5 text-primary"></i>
-
-                <h6 class="text-muted mt-3">
-
-                    Total Savings
-
-                </h6>
-
-                {% if total_savings >= 0 %}
-
-                <h3 class="fw-bold text-primary">
-
-                    ₹ {{ total_savings }}
-
-                </h3>
-
-                {% else %}
-
-                <h3 class="fw-bold text-danger">
-
-                    ₹ {{ total_savings }}
-
-                </h3>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-    </div>
-    
     <!-- Quick Actions -->
 
     <div class="card border-0 shadow rounded-4 mb-4">
@@ -308,7 +310,7 @@ Dashboard | BudgetBuddy
 
     <!-- Recent Records -->
 
-    <div class="row">
+    <div class="row g-4">
 
         <!-- Income -->
 

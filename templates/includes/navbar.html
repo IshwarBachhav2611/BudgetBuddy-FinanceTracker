@@ -8,130 +8,37 @@
 
         <div class="d-flex align-items-center ms-auto d-lg-none">
 
-    <!-- Notification -->
-    <div class="dropdown me-3 d-lg-none">
+            <!-- Notification -->
+            <div class="dropdown me-3 d-lg-none">
 
-        <a class="nav-link position-relative text-white"
-           href="#"
-           role="button"
-           data-bs-toggle="dropdown">
+                <a class="nav-link position-relative text-white"
+                    href="{% url 'notifications' %}">
 
-            <i class="bi bi-bell-fill fs-5"></i>
+                    <i class="bi bi-bell-fill fs-5"></i>
 
-            {% if unread_count > 0 %}
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{ unread_count }}
-            </span>
-            {% endif %}
-
-        </a>
-
-        <div class="dropdown-menu dropdown-menu-end notification-dropdown p-0" style="width:380px;min-width:380px;max-width:380px;">
-
-            <div class="p-3 border-bottom">
-                <h6 class="fw-bold mb-0">
-                    🔔 Notifications
-                </h6>
-            </div>
-
-            {% if notifications %}
-
-                {% for notification in notifications %}
-
-                <a href="{% url 'mark_notification_read' notification.id %}"
-                class="text-decoration-none text-dark">
-
-                    <div class="px-3 py-3 border-bottom notification-item">
-
-                        <div class="d-flex justify-content-between align-items-start">
-
-                            <div>
-
-                                {% if notification.notification_type == "success" %}
-                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-
-                                {% elif notification.notification_type == "warning" %}
-                                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-
-                                {% elif notification.notification_type == "danger" %}
-                                    <i class="bi bi-x-circle-fill text-danger me-2"></i>
-
-                                {% else %}
-                                    <i class="bi bi-info-circle-fill text-primary me-2"></i>
-                                {% endif %}
-
-                                <strong>{{ notification.title }}</strong>
-
-                                {% if not notification.is_read %}
-                                    <span class="badge bg-danger ms-2">
-                                        New
-                                    </span>
-                                {% endif %}
-
-                            </div>
-
-                            <small class="text-muted">
-                                {{ notification.created_at|timesince }}
-                            </small>
-
-                        </div>
-
-                        <small class="text-muted d-block mt-2">
-                            {{ notification.message }}
-                        </small>
-
-                    </div>
-
-                </a>
-
-                {% endfor %}
-
-            {% else %}
-
-               <div class="text-center py-5">
-
-                    <i class="bi bi-bell-slash display-4 text-muted"></i>
-
-                    <h5 class="mt-3 mb-2">
-                        No Notifications
-                    </h5>
-
-                    <p class="text-muted mb-0">
-                        You're all caught up.
-                    </p>
-
-                </div>
-
-            {% endif %}
-
-            <div class="text-center p-2 border-top">
-
-                <a href="{% url 'notifications' %}"
-                   class="text-decoration-none fw-semibold">
-
-                    View All
+                    {% if unread_count > 0 %}
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        {{ unread_count }}
+                    </span>
+                    {% endif %}
 
                 </a>
 
             </div>
+
+            <!-- Hamburger -->
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
 
         </div>
-
-    </div>
-
-    <!-- Hamburger -->
-
-    <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav">
-
-        <span class="navbar-toggler-icon"></span>
-
-    </button>
-
-</div>
 
         <div class="collapse navbar-collapse" id="navbarNav">
 
@@ -184,7 +91,7 @@
                 </li>
 
                 <!-- Notifications -->
-               <li class="nav-item dropdown ms-lg-2 d-none d-lg-block">
+               <li class="nav-item dropdown ms-lg-2 d-none d-md-block">
 
                     <a class="nav-link position-relative"
                        href="#"
@@ -203,7 +110,7 @@
 
                     </a>
 
-                    <div class="dropdown-menu dropdown-menu-end notification-dropdown p-0" style="width:380px;min-width:380px;max-width:380px;">
+                    <div class="dropdown-menu dropdown-menu-end notification-dropdown p-0">
 
                         <div class="p-3 border-bottom">
 
